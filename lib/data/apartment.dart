@@ -43,5 +43,8 @@ class Apartment {
       this.images
   );
 
+  String get formatPrice {
+    return '';
+  }
   
 }
