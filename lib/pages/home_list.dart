@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main_drawer.dart';
 import 'home.dart';
+import '../test.dart';
 
 class HomeList extends StatefulWidget {
 
@@ -25,7 +26,7 @@ class _HomeListState extends State<HomeList> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Image.asset('assets/images/flat1.jpg',width: 200,),
+                Image.asset('assets/images/apartment-1_1.jpg',width: 200,),
                 Text('Strandvägen 77'),
               ],
             ),
@@ -35,7 +36,7 @@ class _HomeListState extends State<HomeList> {
                 onTap: () {
                   Navigator.pushNamed(context, Home.HOME_PATH);
                 },
-                child: ListTile(leading:  Image.asset('assets/images/flat1.jpg',),
+                child: ListTile(leading:  Image.asset('assets/images/apartment-1_1.jpg',),
                 title: Text('Strandvägen 77, Stockholm',style: TextStyle(fontSize: 14),),
                 subtitle: Text('Area: 180 kvm, Antal rum: 5',style: TextStyle(fontSize: 12)),
                 trailing: Column(children : <Widget>[
@@ -46,14 +47,19 @@ class _HomeListState extends State<HomeList> {
             ),
             Card(
               elevation: 5,
-              child: ListTile(leading:  Image.asset('assets/images/flat1.jpg',),
-                title: Text('Strandvägen 77, Stockholm',style: TextStyle(fontSize: 14),),
-                subtitle: Text('Area: 180 kvm, Antal rum: 5, Boendetyp: Lägenhet, ',style: TextStyle(fontSize: 12)),
-                isThreeLine: true,
-                trailing: Column(children : <Widget>[
-                  Text('10 950 000 kr',style: TextStyle(fontSize: 14),),
-                  Icon(Icons.shopping_cart)
-                ],),),
+              child: InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, Test.TEST_PATH);
+                  },
+                  child: ListTile(leading:  Image.asset('assets/images/apartment-2_1.jpg',),
+                  title: Text('Strandvägen 77, Stockholm',style: TextStyle(fontSize: 14),),
+                  subtitle: Text('Area: 180 kvm, Antal rum: 5, Boendetyp: Lägenhet, ',style: TextStyle(fontSize: 12)),
+                  isThreeLine: true,
+                  trailing: Column(children : <Widget>[
+                    Text('10 950 000 kr',style: TextStyle(fontSize: 14),),
+                    Icon(Icons.shopping_cart)
+                  ],),),
+              ),
             ),
           ],
         ),

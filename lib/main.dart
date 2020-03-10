@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'home.dart';
-import 'home_list.dart';
+import './pages/home.dart';
+import './pages/home_list.dart';
+import 'test.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => HomeList(),
         Home.HOME_PATH: (context) => Home(),
+        Test.TEST_PATH: (context) => Test(),
       },
     );
   }
