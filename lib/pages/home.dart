@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/apartments.dart';
+import '../widgets/image_viewer.dart';
 
 Apartments apartments = Apartments();
 
@@ -26,38 +27,7 @@ class _HomeState extends State<Home> {
         body: Container(
           color: Colors.blue[50],
           child: Column(children: <Widget>[
-            // TODO: add guesture detector to handle multiple images
-
-            Image.asset(
-              'assets/images/${apartment.images[imageIndex]}',
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  padding: EdgeInsets.all(0),
-                  icon: Icon(Icons.arrow_left, size: 50,),
-                  onPressed: () {
-                    if (imageIndex > 0) {
-                      setState(() {
-                        imageIndex -= 1;
-                      });
-                    }
-                  },
-                ),
-                IconButton(
-                  padding: EdgeInsets.all(0),
-                  icon: Icon(Icons.arrow_right, size: 50,),
-                  onPressed: () {
-                    if (imageIndex < apartment.images.length-1) {
-                      setState(() {
-                        imageIndex += 1;
-                      });
-                    }
-                  },
-                ),
-              ],
-            ),
+            ImageViewer(apartment.images),      
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Card(
