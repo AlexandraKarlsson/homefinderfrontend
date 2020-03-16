@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:homefinderfrontend/pages/home_detail.dart';
 
-import './pages/home.dart';
+import './pages/home_detail.dart';
 import './pages/home_list.dart';
 import 'test.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeList(),
-        Home.HOME_PATH: (context) => Home(),
+        HomeDetail.HOME_PATH: (context) => HomeDetail(),
         Test.TEST_PATH: (context) => Test(),
       },
     );

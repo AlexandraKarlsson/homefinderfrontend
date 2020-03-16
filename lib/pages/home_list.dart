@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'main_drawer.dart';
-import 'home.dart';
+import 'home_detail.dart';
 import '../test.dart';
 
 class HomeList extends StatefulWidget {
@@ -34,7 +34,7 @@ class _HomeListState extends State<HomeList> {
               elevation: 5,
               child: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, Home.HOME_PATH);
+                  Navigator.pushNamed(context, HomeDetail.HOME_PATH);
                 },
                 child: ListTile(leading:  Image.asset('assets/images/apartment-1_1.jpg',),
                 title: Text('Strandvägen 77, Stockholm',style: TextStyle(fontSize: 14),),

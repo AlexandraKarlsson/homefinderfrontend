@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import '../data/apartments.dart';
 import '../widgets/image_viewer.dart';
+import '../data/home.dart';
 
 Apartments apartments = Apartments();
 
-class Home extends StatefulWidget {
+class HomeDetail extends StatefulWidget {
   static const HOME_PATH = 'home';
 
   @override
-  _HomeState createState() => _HomeState();
+  _HomeDetailState createState() => _HomeDetailState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeDetailState extends State<HomeDetail> {
   int imageIndex = 0;
 
   void switchImage() {}
@@ -83,8 +84,7 @@ class _HomeState extends State<Home> {
                             Row(
                               children: <Widget>[
                                 Expanded(child: Text('Pris:')),
-                                // TODO: format price
-                                Expanded(child: Text('${apartment.price} kr')),
+                                Expanded(child: Text(Home.formatPrice(apartment.price))),
                               ],
                             ),
                             Row(
