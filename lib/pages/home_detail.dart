@@ -1,41 +1,38 @@
 import 'package:flutter/material.dart';
-import '../data/apartments.dart';
+import '../data/apartment.dart';
 import '../widgets/image_viewer.dart';
 import '../data/home.dart';
 
-Apartments apartments = Apartments();
-
 class HomeDetail extends StatefulWidget {
   static const HOME_PATH = 'home';
+  final Apartment apartment;
+
+  HomeDetail(this.apartment);
 
   @override
   _HomeDetailState createState() => _HomeDetailState();
 }
 
 class _HomeDetailState extends State<HomeDetail> {
-  int imageIndex = 0;
-
-  void switchImage() {}
 
   @override
   Widget build(BuildContext context) {
-    final apartment = apartments.apartments[0];
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('${apartment.address} lgh ${apartment.apartmentNumber}'),
+          title: Text('${widget.apartment.address} lgh ${widget.apartment.apartmentNumber}'),
         ),
         body: Container(
           color: Colors.blue[50],
           child: Column(children: <Widget>[
-            ImageViewer(apartment.images),      
+            ImageViewer(widget.apartment.images),      
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Card(
                   elevation: 5,
                   child: Padding(
                     padding: const EdgeInsets.all(4),
-                    child: Text(apartment.description),
+                    child: Text(widget.apartment.description),
                   )),
             ),
             Padding(
@@ -55,7 +52,7 @@ class _HomeDetailState extends State<HomeDetail> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Expanded(child: Text('Antal rum:')),
-                                Expanded(child: Text('${apartment.rooms} st'))
+                                Expanded(child: Text('${widget.apartment.rooms} st'))
                               ],
                             ),
                             Row(
@@ -63,13 +60,13 @@ class _HomeDetailState extends State<HomeDetail> {
                               children: <Widget>[
                                 Expanded(child: Text('Boarea:')),
                                 Expanded(
-                                    child: Text('${apartment.livingSpace} kvm'))
+                                    child: Text('${widget.apartment.livingSpace} kvm'))
                               ],
                             ),
                             Row(
                               children: <Widget>[
                                 Expanded(child: Text('Byggnadsår:')),
-                                Expanded(child: Text('${apartment.built}')),
+                                Expanded(child: Text('${widget.apartment.built}')),
                               ],
                             ),
                           ],
@@ -84,14 +81,14 @@ class _HomeDetailState extends State<HomeDetail> {
                             Row(
                               children: <Widget>[
                                 Expanded(child: Text('Pris:')),
-                                Expanded(child: Text(Home.formatPrice(apartment.price))),
+                                Expanded(child: Text(Home.formatPrice(widget.apartment.price))),
                               ],
                             ),
                             Row(
                               children: <Widget>[
                                 Expanded(child: Text('Hyra:')),
                                 Expanded(
-                                    child: Text('${apartment.charge} kr/mån')),
+                                    child: Text('${widget.apartment.charge} kr/mån')),
                               ],
                             ),
                             Row(
@@ -99,7 +96,7 @@ class _HomeDetailState extends State<HomeDetail> {
                                 Expanded(child: Text('Driftkostnad:')),
                                 Expanded(
                                     child: Text(
-                                        '${apartment.operationCost} kr/mån')),
+                                        '${widget.apartment.operationCost} kr/mån')),
                               ],
                             ),
                           ],

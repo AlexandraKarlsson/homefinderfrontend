@@ -19,7 +19,7 @@ class Apartment {
   final String address;
   final String description;
   final double livingSpace;
-  final int rooms;
+  final double rooms;
   final int built;
   final int price;
   final int operationCost;
@@ -41,10 +41,5 @@ class Apartment {
       this.charge,
       this.image,
       this.images
-  );
-
-  String get formatPrice {
-    return '';
-  }
-  
+  );  
 }

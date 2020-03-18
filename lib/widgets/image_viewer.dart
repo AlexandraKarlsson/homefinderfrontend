@@ -23,6 +23,7 @@ class _ImageViewerState extends State<ImageViewer> {
 
     for (int i=0; i<widget.images.length; i++) {
       imageList.add(Container(
+        height: 25,
         width: 25,
         child: IconButton(
           icon: index == i
