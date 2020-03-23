@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_read_more_text/flutter_read_more_text.dart';
 import '../data/apartment.dart';
+import '../data/house.dart';
 import '../widgets/image_viewer.dart';
 import '../data/home.dart';
 
 class HomeDetail extends StatefulWidget {
   static const HOME_PATH = 'home';
-  final Apartment apartment;
+  final Home home;
 
-  HomeDetail(this.apartment);
+  HomeDetail(this.home);
 
   @override
   _HomeDetailState createState() => _HomeDetailState();
@@ -17,28 +18,41 @@ class HomeDetail extends StatefulWidget {
 class _HomeDetailState extends State<HomeDetail> {
   @override
   Widget build(BuildContext context) {
+    String appBarText;
+    String chargeOrPlotSize;
+
+    if (widget.home is Apartment) {
+      Apartment apartment = widget.home as Apartment;
+      appBarText = '${apartment.address} lgh ${apartment.apartmentNumber}';
+      chargeOrPlotSize = '${apartment.charge} kr/mån';
+    } else {
+      appBarText =
+          '${widget.home.address} lgh ${(widget.home as House).cadastral}';
+      chargeOrPlotSize = '${(widget.home as House).plotSize} kvm';
+    }
+
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-              '${widget.apartment.address} lgh ${widget.apartment.apartmentNumber}'),
+          title: Text(appBarText),
         ),
         body: Container(
           color: Colors.blue[50],
           child: Column(children: <Widget>[
-            ImageViewer(widget.apartment.images),
+            ImageViewer(widget.home.images),
             Expanded(
-                          child: ListView(children: <Widget>[
+              child: ListView(children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Card(
                       elevation: 5,
                       child: Padding(
                         padding: const EdgeInsets.all(4),
-                        child: ReadMoreText(widget.apartment.description),
+                        child: ReadMoreText(widget.home.description),
                       )),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                   child: Card(
                     elevation: 5,
                     child: Padding(
@@ -55,8 +69,7 @@ class _HomeDetailState extends State<HomeDetail> {
                                   children: <Widget>[
                                     Expanded(child: Text('Antal rum:')),
                                     Expanded(
-                                        child:
-                                            Text('${widget.apartment.rooms} st'))
+                                        child: Text('${widget.home.rooms} st'))
                                   ],
                                 ),
                                 Row(
@@ -65,14 +78,14 @@ class _HomeDetailState extends State<HomeDetail> {
                                     Expanded(child: Text('Boarea:')),
                                     Expanded(
                                         child: Text(
-                                            '${widget.apartment.livingSpace} kvm'))
+                                            '${widget.home.livingSpace} kvm'))
                                   ],
                                 ),
                                 Row(
                                   children: <Widget>[
                                     Expanded(child: Text('Byggnadsår:')),
                                     Expanded(
-                                        child: Text('${widget.apartment.built}')),
+                                        child: Text('${widget.home.built}')),
                                   ],
                                 ),
                               ],
@@ -89,15 +102,16 @@ class _HomeDetailState extends State<HomeDetail> {
                                     Expanded(child: Text('Pris:')),
                                     Expanded(
                                         child: Text(Home.formatPrice(
-                                            widget.apartment.price))),
+                                            widget.home.price))),
                                   ],
                                 ),
                                 Row(
                                   children: <Widget>[
-                                    Expanded(child: Text('Hyra:')),
                                     Expanded(
-                                        child: Text(
-                                            '${widget.apartment.charge} kr/mån')),
+                                        child: Text(widget.home is Apartment
+                                            ? 'Hyra:'
+                                            : 'Tomtarea:')),
+                                    Expanded(child: Text(chargeOrPlotSize)),
                                   ],
                                 ),
                                 Row(
@@ -105,7 +119,7 @@ class _HomeDetailState extends State<HomeDetail> {
                                     Expanded(child: Text('Driftkostnad:')),
                                     Expanded(
                                         child: Text(
-                                            '${widget.apartment.operationCost} kr/mån')),
+                                            '${widget.home.operationCost} kr/mån')),
                                   ],
                                 ),
                               ],

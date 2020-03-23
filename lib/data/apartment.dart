@@ -14,32 +14,36 @@
         CONSTRAINT fk_apartment_home FOREIGN KEY (homeid) REFERENCES home(id)
 
 */
-class Apartment {
-  final int id;
-  final String address;
-  final String description;
-  final double livingSpace;
-  final double rooms;
-  final int built;
-  final int price;
-  final int operationCost;
+
+import 'home.dart';
+
+class Apartment extends Home {
   final int apartmentNumber;
   final int charge;
-  final String image;
-  final List<String> images;
 
   Apartment(
-      this.id,
-      this.address,
-      this.description,
-      this.livingSpace,
-      this.rooms,
-      this.built,
-      this.price,
-      this.operationCost,
-      this.apartmentNumber,
-      this.charge,
-      this.image,
-      this.images
-  );  
+    id,
+    address,
+    description,
+    livingSpace,
+    rooms,
+    built,
+    price,
+    operationCost,
+    image,
+    images,
+    this.apartmentNumber,
+    this.charge,
+  ) : super(
+          id,
+          address,
+          description,
+          livingSpace,
+          rooms,
+          built,
+          price,
+          operationCost,
+          image,
+          images,
+        );
 }

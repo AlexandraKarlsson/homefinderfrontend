@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'main_drawer.dart';
 import '../widgets/home_item.dart';
 import '../data/apartments.dart';
+import '../data/houses.dart';
+import '../data/home.dart';
 
 Apartments apartments = Apartments();
+Houses houses = Houses();
 
 class HomeList extends StatefulWidget {
   @override
@@ -15,6 +18,10 @@ class _HomeListState extends State<HomeList> {
 
   @override
   Widget build(BuildContext context) {
+    List<Home> homeList = List<Home>();
+    homeList.addAll(apartments.apartments);
+    homeList.addAll(houses.houses);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Hitta hemmet'),
@@ -37,9 +44,9 @@ class _HomeListState extends State<HomeList> {
           Container(
             child: Expanded(
               child: ListView.builder(
-                itemCount: apartments.apartments.length,
+                itemCount: homeList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return HomeItem(apartment: apartments.apartments[index]);
+                  return HomeItem(home: homeList[index]);
                 },
               ),
             ),

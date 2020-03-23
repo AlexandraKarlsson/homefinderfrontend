@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import '../pages/home_detail.dart';
-import '../data/apartment.dart';
 import '../data/home.dart';
 
 class HomeItem extends StatelessWidget {
 
-  const HomeItem({ @required this.apartment });
+  final Home home;
 
-  final Apartment apartment;
+  const HomeItem({ @required this.home });
 
   @override
   Widget build(BuildContext context) {
@@ -21,24 +20,24 @@ class HomeItem extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        HomeDetail(apartment)));
+                        HomeDetail(home)));
           },
           child: ListTile(
             leading: Image.asset(
-              'assets/images/${apartment.image}',
+              'assets/images/${home.image}',
             ),
             title: Text(
-              apartment.address,
+              home.address,
               style: TextStyle(fontSize: 14),
             ),
             subtitle: Text(
-                'Area: ${apartment.livingSpace}, Antal rum: ${apartment.rooms}',
+                'Area: ${home.livingSpace}, Antal rum: ${home.rooms}',
                 style: TextStyle(fontSize: 12)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  Home.formatPrice(apartment.price),
+                  Home.formatPrice(home.price),
                   style: TextStyle(fontSize: 14),
                 ),
                 Icon(Icons.shopping_cart)
