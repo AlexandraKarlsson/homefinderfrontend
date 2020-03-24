@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'main_drawer.dart';
-import '../widgets/home_item.dart';
+import '../widgets/home_list_item.dart';
 import '../data/apartments.dart';
 import '../data/houses.dart';
 import '../data/home.dart';
@@ -46,7 +46,7 @@ class _HomeListState extends State<HomeList> {
               child: ListView.builder(
                 itemCount: homeList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return HomeItem(home: homeList[index]);
+                  return HomeListItem(home: homeList[index]);
                 },
               ),
             ),

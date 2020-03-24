@@ -46,4 +46,8 @@ class Apartment extends Home {
           image,
           images,
         );
+  
+  static String formatCharge(int charge) {
+    return charge as String;
+  }
 }

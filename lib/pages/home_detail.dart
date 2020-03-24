@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_read_more_text/flutter_read_more_text.dart';
 import '../data/apartment.dart';
 import '../data/house.dart';
-import '../widgets/image_viewer.dart';
 import '../data/home.dart';
+import '../widgets/image_viewer.dart';
+import '../widgets/home_item.dart';
 
 class HomeDetail extends StatefulWidget {
   static const HOME_PATH = 'home';
@@ -16,19 +17,45 @@ class HomeDetail extends StatefulWidget {
 }
 
 class _HomeDetailState extends State<HomeDetail> {
-  @override
-  Widget build(BuildContext context) {
-    String appBarText;
-    String chargeOrPlotSize;
+  List<HomeItem> buildLeftItems() {
+    List<HomeItem> homeItemList = [];
+
+    homeItemList.add(HomeItem('Antal rum:', '${widget.home.rooms} st'));
+    homeItemList.add(HomeItem('Boarea:', '${widget.home.livingSpace} kvm'));
+    homeItemList.add(HomeItem('Byggnadsår:', '${widget.home.built}'));
+
+    return homeItemList;
+  }
+
+  List<HomeItem> buildRightItems() {
+    List<HomeItem> homeItemList = [];
 
     if (widget.home is Apartment) {
       Apartment apartment = widget.home as Apartment;
-      appBarText = '${apartment.address} lgh ${apartment.apartmentNumber}';
-      chargeOrPlotSize = '${apartment.charge} kr/mån';
+      homeItemList.add(HomeItem('Pris:', Home.formatPrice(widget.home.price)));
+      homeItemList.add(HomeItem('Hyra:', '${apartment.charge} kr/mån'));
+      homeItemList.add(
+          HomeItem('Driftkostnad:', '${widget.home.operationCost} kr/mån'));
+    } else {
+      House house = widget.home as House;
+      homeItemList.add(HomeItem('Pris:', Home.formatPrice(widget.home.price)));
+      homeItemList.add(HomeItem('Tomtarea:', '${house.plotSize} kvm'));
+      homeItemList.add(
+          HomeItem('Driftkostnad:', '${widget.home.operationCost} kr/mån'));
+    }
+    return homeItemList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String appBarText;
+
+    if (widget.home is Apartment) {
+      Apartment apartment = widget.home as Apartment;
+      appBarText = '${apartment.address}, lgh ${apartment.apartmentNumber}';
     } else {
       appBarText =
-          '${widget.home.address} lgh ${(widget.home as House).cadastral}';
-      chargeOrPlotSize = '${(widget.home as House).plotSize} kvm';
+          '${widget.home.address}, ${(widget.home as House).cadastral}';
     }
 
     return Scaffold(
@@ -63,32 +90,7 @@ class _HomeDetailState extends State<HomeDetail> {
                           Flexible(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Expanded(child: Text('Antal rum:')),
-                                    Expanded(
-                                        child: Text('${widget.home.rooms} st'))
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Expanded(child: Text('Boarea:')),
-                                    Expanded(
-                                        child: Text(
-                                            '${widget.home.livingSpace} kvm'))
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(child: Text('Byggnadsår:')),
-                                    Expanded(
-                                        child: Text('${widget.home.built}')),
-                                  ],
-                                ),
-                              ],
+                              children: buildLeftItems(),
                             ),
                           ),
                           SizedBox(
@@ -96,33 +98,7 @@ class _HomeDetailState extends State<HomeDetail> {
                           ),
                           Flexible(
                             child: Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(child: Text('Pris:')),
-                                    Expanded(
-                                        child: Text(Home.formatPrice(
-                                            widget.home.price))),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                        child: Text(widget.home is Apartment
-                                            ? 'Hyra:'
-                                            : 'Tomtarea:')),
-                                    Expanded(child: Text(chargeOrPlotSize)),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(child: Text('Driftkostnad:')),
-                                    Expanded(
-                                        child: Text(
-                                            '${widget.home.operationCost} kr/mån')),
-                                  ],
-                                ),
-                              ],
+                              children: buildRightItems(),
                             ),
                           ),
                         ],
