@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import './pages/home_detail.dart';
 import './pages/home_list.dart';
 import 'test.dart';
 
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => HomeList(),
+        '/': (context) => HomeList(true, true),
         // HomeDetail.HOME_PATH: (context) => HomeDetail(),
         Test.TEST_PATH: (context) => Test(),
       },

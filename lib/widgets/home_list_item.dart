@@ -37,7 +37,7 @@ class HomeListItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  Home.formatPrice(home.price),
+                  Home.formatCurrency(home.price, 'kr'),
                   style: TextStyle(fontSize: 14),
                 ),
                 Icon(Icons.shopping_cart)

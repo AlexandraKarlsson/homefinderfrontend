@@ -25,12 +25,12 @@ class Home {
     this.images,
   );
 
-  static String formatPrice(int price) {
+  static String formatCurrency(int price, String unit) {
     double priceD = price.toDouble();
     FlutterMoneyFormatter fmf = FlutterMoneyFormatter(
         amount: priceD,
         settings: MoneyFormatterSettings(
-          symbol: 'kr',
+          symbol: unit,
           thousandSeparator: ' ',
           //decimalSeparator: ',',
           //symbolAndNumberSeparator: ' ',

@@ -9,24 +9,31 @@ Apartments apartments = Apartments();
 Houses houses = Houses();
 
 class HomeList extends StatefulWidget {
+  bool showApartments;
+  bool showHouses;
+
+  HomeList(this.showApartments, this.showHouses);
+
   @override
   _HomeListState createState() => _HomeListState();
 }
 
 class _HomeListState extends State<HomeList> {
-  String search;
-
   @override
   Widget build(BuildContext context) {
     List<Home> homeList = List<Home>();
-    homeList.addAll(apartments.apartments);
-    homeList.addAll(houses.houses);
+    if (widget.showApartments) {
+      homeList.addAll(apartments.apartments);
+    }
+    if (widget.showHouses) {
+      homeList.addAll(houses.houses);
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Hitta hemmet'),
       ),
-      drawer: MainDrawer(),
+      drawer: MainDrawer(widget.showApartments, widget.showHouses),
       body: Column(
         children: <Widget>[
           Container(
@@ -56,5 +63,3 @@ class _HomeListState extends State<HomeList> {
     );
   }
 }
-
-

@@ -24,6 +24,10 @@ class _HomeDetailState extends State<HomeDetail> {
     homeItemList.add(HomeItem('Boarea:', '${widget.home.livingSpace} kvm'));
     homeItemList.add(HomeItem('Byggnadsår:', '${widget.home.built}'));
 
+    if(widget.home is House) {
+      homeItemList.add(HomeItem('Byggnadstyp:', '${(widget.home as House).structure}'));
+    }
+
     return homeItemList;
   }
 
@@ -32,16 +36,17 @@ class _HomeDetailState extends State<HomeDetail> {
 
     if (widget.home is Apartment) {
       Apartment apartment = widget.home as Apartment;
-      homeItemList.add(HomeItem('Pris:', Home.formatPrice(widget.home.price)));
+      homeItemList.add(HomeItem('Pris:', Home.formatCurrency(widget.home.price, 'kr')));
       homeItemList.add(HomeItem('Hyra:', '${apartment.charge} kr/mån'));
       homeItemList.add(
           HomeItem('Driftkostnad:', '${widget.home.operationCost} kr/mån'));
     } else {
       House house = widget.home as House;
-      homeItemList.add(HomeItem('Pris:', Home.formatPrice(widget.home.price)));
-      homeItemList.add(HomeItem('Tomtarea:', '${house.plotSize} kvm'));
+      homeItemList.add(HomeItem('Pris:', Home.formatCurrency(widget.home.price, 'kr')));
       homeItemList.add(
-          HomeItem('Driftkostnad:', '${widget.home.operationCost} kr/mån'));
+          HomeItem('Driftkostnad:', Home.formatCurrency(house.operationCost, 'kr/mån')));
+      homeItemList.add(HomeItem('Tomtarea:', '${house.plotSize} kvm'));
+      homeItemList.add(HomeItem('Grund:', '${house.ground}'));
     }
     return homeItemList;
   }
@@ -94,7 +99,7 @@ class _HomeDetailState extends State<HomeDetail> {
                             ),
                           ),
                           SizedBox(
-                            width: 15,
+                            width: 10,
                           ),
                           Flexible(
                             child: Column(
