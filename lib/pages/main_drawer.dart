@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'home_list.dart';
+import '../data/settings.dart';
 
 class MainDrawer extends StatefulWidget {
-  bool apartment = false;
-  bool house = false;
 
-  MainDrawer(this.apartment, this.house);
+  // bool apartment = false;
+  // bool house = false;
+
+  // MainDrawer(this.apartment, this.house);
 
   @override
   _MainDrawerState createState() => _MainDrawerState();
@@ -15,6 +18,8 @@ class _MainDrawerState extends State<MainDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    Settings settings = Provider.of<Settings>(context);
+
     return Container(
       height: double.infinity,
       width: 250,
@@ -49,22 +54,18 @@ class _MainDrawerState extends State<MainDrawer> {
           ),
           CheckboxListTile(
             title: new Text('Lägenhet'),
-            value: widget.apartment,
+            value: settings.showApartment,
             onChanged: (value) {
-              setState(() {
-                widget.apartment = value;
-              });
+              settings.changeShowApartment(value);
             },
             dense: true,
             activeColor: Colors.green,
           ),
           CheckboxListTile(
             title: new Text('Hus'),
-            value: widget.house,
+            value: settings.showHouse,
             onChanged: (value) {
-              setState(() {
-                widget.house = value;
-              });
+              settings.changeShowHouse(value);
             },
             dense: true,
             activeColor: Colors.green,
@@ -80,7 +81,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          HomeList(widget.apartment, widget.house),
+                         HomeList(),
                     ),
                   );
                 },

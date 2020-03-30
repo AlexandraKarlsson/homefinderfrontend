@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'main_drawer.dart';
 import '../widgets/home_list_item.dart';
 import '../data/apartments.dart';
 import '../data/houses.dart';
 import '../data/home.dart';
+import '../data/settings.dart';
 
 Apartments apartments = Apartments();
 Houses houses = Houses();
 
 class HomeList extends StatefulWidget {
-  bool showApartments;
-  bool showHouses;
-
-  HomeList(this.showApartments, this.showHouses);
 
   @override
   _HomeListState createState() => _HomeListState();
@@ -21,11 +19,13 @@ class HomeList extends StatefulWidget {
 class _HomeListState extends State<HomeList> {
   @override
   Widget build(BuildContext context) {
+    Settings settings = Provider.of<Settings>(context);
+
     List<Home> homeList = List<Home>();
-    if (widget.showApartments) {
+    if (settings.showApartment) {
       homeList.addAll(apartments.apartments);
     }
-    if (widget.showHouses) {
+    if (settings.showHouse) {
       homeList.addAll(houses.houses);
     }
 
@@ -33,7 +33,7 @@ class _HomeListState extends State<HomeList> {
       appBar: AppBar(
         title: Text('Hitta hemmet'),
       ),
-      drawer: MainDrawer(widget.showApartments, widget.showHouses),
+      drawer: MainDrawer(),
       body: Column(
         children: <Widget>[
           Container(
