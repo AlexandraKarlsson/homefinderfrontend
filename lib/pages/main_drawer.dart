@@ -4,17 +4,21 @@ import 'home_list.dart';
 import '../data/settings.dart';
 
 class MainDrawer extends StatefulWidget {
-
-  // bool apartment = false;
-  // bool house = false;
-
-  // MainDrawer(this.apartment, this.house);
+  final String search;
+  MainDrawer(this.search);
 
   @override
   _MainDrawerState createState() => _MainDrawerState();
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+  TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.search);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +46,11 @@ class _MainDrawerState extends State<MainDrawer> {
               hintText: 'Sök på address',
               isDense: true,
             ),
+            controller: controller,
             onChanged: (value) {
-              setState(() {
-                //search = value;
-              });
-              print(value);
+              print('search=$value');
+              // controller.text = value;
+              settings.changeSearchString(value);
             },
           ),
           SizedBox(
@@ -80,8 +84,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                         HomeList(),
+                      builder: (BuildContext context) => HomeList(),
                     ),
                   );
                 },

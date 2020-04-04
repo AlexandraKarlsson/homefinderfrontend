@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'main_drawer.dart';
 import '../widgets/home_list_item.dart';
 import '../data/apartments.dart';
@@ -21,19 +22,27 @@ class _HomeListState extends State<HomeList> {
   Widget build(BuildContext context) {
     Settings settings = Provider.of<Settings>(context);
 
-    List<Home> homeList = List<Home>();
+    List<Home> homeListTemp = List<Home>();
     if (settings.showApartment) {
-      homeList.addAll(apartments.apartments);
+      homeListTemp.addAll(apartments.apartments);
     }
     if (settings.showHouse) {
-      homeList.addAll(houses.houses);
+      homeListTemp.addAll(houses.houses);
     }
+
+    List<Home> homeList = List<Home>();
+    for(int index=0; index<homeListTemp.length; index++) {
+      if(homeListTemp[index].address.startsWith(settings.search)) {
+        homeList.add(homeListTemp[index]);
+      }
+    }
+    print('showApartment=${settings.showApartment}, showHouses=${settings.showHouse}, search=${settings.search},items=${homeList.length}');
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Hitta hemmet'),
       ),
-      drawer: MainDrawer(),
+      drawer: MainDrawer(settings.search),
       body: Column(
         children: <Widget>[
           Container(
