@@ -9,8 +9,8 @@ class Home {
   final int built;
   final int price;
   final int operationCost;
-  final String image;
-  final List<String> images;
+  String image;
+  List<String> images;
 
   Home(
     this.id,

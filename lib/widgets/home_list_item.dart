@@ -3,13 +3,14 @@ import '../pages/home_detail.dart';
 import '../data/home.dart';
 
 class HomeListItem extends StatelessWidget {
-
   final Home home;
 
-  const HomeListItem({ @required this.home });
+  const HomeListItem({@required this.home});
 
   @override
   Widget build(BuildContext context) {
+    print(home.image);
+
     return Container(
       child: Card(
         elevation: 5,
@@ -19,13 +20,15 @@ class HomeListItem extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        HomeDetail(home)));
+                    builder: (BuildContext context) => HomeDetail(home)));
           },
           child: ListTile(
-            leading: Image.asset(
-              'assets/images/${home.image}',
+            leading: Image.network(
+              'http://10.0.2.2:8010/${home.image}',
             ),
+            /* Image.asset(
+              'assets/images/${home.image}',
+            ),*/
             title: Text(
               home.address,
               style: TextStyle(fontSize: 14),
