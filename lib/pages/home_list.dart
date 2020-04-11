@@ -8,12 +8,14 @@ import 'package:http/http.dart' as http;
 import 'main_drawer.dart';
 import '../widgets/home_list_item.dart';
 import '../data/apartments.dart';
+import '../data/apartment.dart';
 import '../data/houses.dart';
+import '../data/house.dart';
 import '../data/home.dart';
 import '../data/settings.dart';
 
-Apartments apartments = Apartments();
-Houses houses = Houses();
+// Apartments apartments = Apartments();
+// Houses houses = Houses();
 
 class HomeList extends StatefulWidget {
   @override
@@ -21,6 +23,9 @@ class HomeList extends StatefulWidget {
 }
 
 class _HomeListState extends State<HomeList> {
+  Apartments apartments; //  = Apartments();
+  Houses houses; //  = Houses();
+
   var _isInit = true;
   var _isLoading = false;
 
@@ -42,24 +47,48 @@ class _HomeListState extends State<HomeList> {
   }
 
   Future<void> fetchData() async {
-    await fetchApartments();
-    //await fetchHouses();
-    await fetchImage();
+    if (apartments == null) {
+      apartments = Apartments();
+      houses = Houses();
+      await fetchApartments();
+      await fetchHouses();
+      Map<String, dynamic> imageMap = await fetchImage();
+      setImage(imageMap);
+    }
   }
 
-  Future<void> fetchImage() async {
+  void setImage(Map<String, dynamic> imageMap) {
+    if (imageMap != null) {
+      Map<int, String> images = {};
+      imageMap['rows'].forEach((image) {
+        images[image['homeid']] = image['imagename'];
+      });
+      // print('Image = ${images[1]}');
+
+      for (int index = 0; index < apartments.apartments.length; index++) {
+        Apartment apartment = apartments.apartments[index];
+        apartment.image = images[apartment.id];
+      }
+      for (int index = 0; index < houses.houses.length; index++) {
+        House house = houses.houses[index];
+        house.image = images[house.id];
+      }
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchImage() async {
     var url = 'http://10.0.2.2:8000/homes/image';
+    Map<String, dynamic> imageData;
 
     // Await the http get response, then decode the json-formatted response.
     var response = await http.get(url);
     if (response.statusCode == 200) {
-      print('response ${response.body}');
-      final imageData =
-          convert.json.decode(response.body) as Map<String, dynamic>;
-      apartments.setImage(imageData);
+      // print('response ${response.body}');
+      imageData = convert.json.decode(response.body) as Map<String, dynamic>;
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
+    return imageData;
   }
 
   Future<void> fetchApartments() async {
@@ -68,10 +97,25 @@ class _HomeListState extends State<HomeList> {
     // Await the http get response, then decode the json-formatted response.
     var response = await http.get(url);
     if (response.statusCode == 200) {
-      print('response ${response.body}');
+      // print('response ${response.body}');
       final apartmentData =
           convert.json.decode(response.body) as Map<String, dynamic>;
       apartments.add(apartmentData);
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
+  Future<void> fetchHouses() async {
+    var url = 'http://10.0.2.2:8000/house';
+
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      // print('response ${response.body}');
+      final houseData =
+          convert.json.decode(response.body) as Map<String, dynamic>;
+      houses.add(houseData);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -98,8 +142,7 @@ class _HomeListState extends State<HomeList> {
           homeList.add(homeListTemp[index]);
         }
       }
-      print(
-          'showApartment=${settings.showApartment}, showHouses=${settings.showHouse}, search=${settings.search},items=${homeList.length}');
+      // print('showApartment=${settings.showApartment}, showHouses=${settings.showHouse}, search=${settings.search},items=${homeList.length}');
 
       return Scaffold(
         appBar: AppBar(
@@ -108,18 +151,6 @@ class _HomeListState extends State<HomeList> {
         drawer: MainDrawer(settings.search),
         body: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                children: <Widget>[
-                  Image.asset(
-                    'assets/images/apartment-1_1.jpg',
-                    width: 200,
-                  ),
-                  Text('Strandvägen 77'),
-                ],
-              ),
-            ),
             Container(
               child: Expanded(
                 child: ListView.builder(

@@ -4,7 +4,47 @@ class Houses {
   List<House> houses = [];
 
   Houses() {
-    House house = House (
+    // addHouses();
+  }
+
+  void add(Map<String, dynamic> houseMap) {
+    houseMap['rows'].forEach((house) {
+      int id = house['id'];
+      String address = house['address'];
+      String description = house['description'];
+      int livingSpace = house['livingspace'];
+      double rooms = house['rooms'].toDouble();
+      int built = house['built'];
+      int price = house['price'];
+      int operationCost = house['operationcost'];
+      String image = house['image'];
+      List<String> images = house['images'];
+      String cadastral = house['cadastral'];
+      String structure = house['structure'];
+      int plotSize = house['plotsize'];
+      String ground = house['ground'];
+      House newHouse = House(
+        id,
+        address,
+        description,
+        livingSpace,
+        rooms,
+        built,
+        price,
+        operationCost,
+        image,
+        images,
+        cadastral,
+        structure,
+        plotSize,
+        ground,
+      );
+      houses.add(newHouse);
+    });
+  }
+
+  void addHouses() {
+    House house = House(
       4,
       'Albano 357',
       'Denna charmiga 1940-talsvilla, som under senare år renoverats smakfullt, är belägen i utkanten av mindre bybildning nära Lunda kyrka och Arlanda. Stor härlig trädgårdstomt med gräsmatta, många äppelträd,, staket mm. På tomten finns även ett uthus med bl a vedbod. Högt läge med vy över grannhusen och öppna landskap. Närhet till ICA-butik (Lunda livs) samt busslinjer och bekvämt bilavstånd till affärscentra mm.',
@@ -22,7 +62,7 @@ class Houses {
     );
 
     houses.add(house);
- 
+
     house = House(
       5,
       'Oxdragarbacken 1',
@@ -62,4 +102,3 @@ class Houses {
     houses.add(house);
   }
 }
-

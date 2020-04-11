@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_read_more_text/flutter_read_more_text.dart';
+
+import 'dart:async';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+
 import '../data/apartment.dart';
 import '../data/house.dart';
 import '../data/home.dart';
@@ -17,6 +22,46 @@ class HomeDetail extends StatefulWidget {
 }
 
 class _HomeDetailState extends State<HomeDetail> {
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+    fetchImages().then((_) {
+      setState(() {
+        _isInit = false;
+        _isLoading = false;
+      });
+    });
+  }
+
+  Future<void> fetchImages() async {
+    print('homeid = ${widget.home.id}');
+    var url = 'http://10.0.2.2:8000/homes/${widget.home.id}/images';
+
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      // print('response ${response.body}');
+      Map<String, dynamic> imageData =
+          convert.json.decode(response.body) as Map<String, dynamic>;
+      List<String> images = [];
+      imageData['rows'].forEach((image) {
+        images.add(image['imagename']);
+      });
+      widget.home.images = images;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
+
   List<HomeItem> buildLeftItems() {
     List<HomeItem> homeItemList = [];
 
@@ -24,8 +69,9 @@ class _HomeDetailState extends State<HomeDetail> {
     homeItemList.add(HomeItem('Boarea:', '${widget.home.livingSpace} kvm'));
     homeItemList.add(HomeItem('Byggnadsår:', '${widget.home.built}'));
 
-    if(widget.home is House) {
-      homeItemList.add(HomeItem('Byggnadstyp:', '${(widget.home as House).structure}'));
+    if (widget.home is House) {
+      homeItemList
+          .add(HomeItem('Byggnadstyp:', '${(widget.home as House).structure}'));
     }
 
     return homeItemList;
@@ -36,15 +82,17 @@ class _HomeDetailState extends State<HomeDetail> {
 
     if (widget.home is Apartment) {
       Apartment apartment = widget.home as Apartment;
-      homeItemList.add(HomeItem('Pris:', Home.formatCurrency(widget.home.price, 'kr')));
+      homeItemList
+          .add(HomeItem('Pris:', Home.formatCurrency(widget.home.price, 'kr')));
       homeItemList.add(HomeItem('Hyra:', '${apartment.charge} kr/mån'));
-      homeItemList.add(
-          HomeItem('Driftkostnad:', '${widget.home.operationCost} kr/mån'));
+      homeItemList.add(HomeItem('Driftkostnad:',
+          Home.formatCurrency(widget.home.operationCost, 'kr/mån')));
     } else {
       House house = widget.home as House;
-      homeItemList.add(HomeItem('Pris:', Home.formatCurrency(widget.home.price, 'kr')));
-      homeItemList.add(
-          HomeItem('Driftkostnad:', Home.formatCurrency(house.operationCost, 'kr/mån')));
+      homeItemList
+          .add(HomeItem('Pris:', Home.formatCurrency(widget.home.price, 'kr')));
+      homeItemList.add(HomeItem('Driftkostnad:',
+          Home.formatCurrency(widget.home.operationCost, 'kr/mån')));
       homeItemList.add(HomeItem('Tomtarea:', '${house.plotSize} kvm'));
       homeItemList.add(HomeItem('Grund:', '${house.ground}'));
     }
@@ -54,66 +102,74 @@ class _HomeDetailState extends State<HomeDetail> {
   @override
   Widget build(BuildContext context) {
     String appBarText;
-
-    if (widget.home is Apartment) {
-      Apartment apartment = widget.home as Apartment;
-      appBarText = '${apartment.address}, lgh ${apartment.apartmentNumber}';
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
     } else {
-      appBarText =
-          '${widget.home.address}, ${(widget.home as House).cadastral}';
-    }
+      if (widget.home is Apartment) {
+        Apartment apartment = widget.home as Apartment;
+        appBarText = '${apartment.address}, lgh ${apartment.apartmentNumber}';
+      } else {
+        appBarText =
+            '${widget.home.address}, ${(widget.home as House).cadastral}';
+      }
 
-    return Scaffold(
+      return Scaffold(
         appBar: AppBar(
           title: Text(appBarText),
         ),
         body: Container(
           color: Colors.blue[50],
-          child: Column(children: <Widget>[
-            ImageViewer(widget.home.images),
-            Expanded(
-              child: ListView(children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Card(
-                      elevation: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: ReadMoreText(widget.home.description),
-                      )),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-                  child: Card(
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Flexible(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: buildLeftItems(),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            child: Column(
-                              children: buildRightItems(),
-                            ),
-                          ),
-                        ],
-                      ),
+          child: Column(
+            children: <Widget>[
+              ImageViewer(widget.home.images),
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: ReadMoreText(widget.home.description),
+                          )),
                     ),
-                  ),
-                )
-              ]),
-            ),
-          ]),
-        ));
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 8),
+                      child: Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Flexible(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: buildLeftItems(),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: Column(
+                                  children: buildRightItems(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }

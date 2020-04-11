@@ -9,7 +9,7 @@ class HomeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(home.image);
+    // print(home.image);
 
     return Container(
       child: Card(

@@ -23,16 +23,28 @@ class Apartments {
       int id = apartment['id'];
       String address = apartment['address'];
       String description = apartment['description'];
-      double livingSpace = apartment['livingSpace'];
+      int livingSpace = apartment['livingspace'];
       double rooms = apartment['rooms'].toDouble();
       int built = apartment['built'];
       int price = apartment['price'];
-      int operationCost = apartment['operationCost'];
+      int operationCost = apartment['operationcost'];
       String image = apartment['image'];
       List<String> images = apartment['images'];
-      int apartmentNumber = apartment['apartmentNumber'];
+      int apartmentNumber = apartment['apartmentnumber'];
       int charge = apartment['charge'];
-      Apartment newApartment = Apartment(id,address,description,livingSpace,rooms,built,price,operationCost,image,images,apartmentNumber,charge);
+      Apartment newApartment = Apartment(
+          id,
+          address,
+          description,
+          livingSpace,
+          rooms,
+          built,
+          price,
+          operationCost,
+          image,
+          images,
+          apartmentNumber,
+          charge);
       apartments.add(newApartment);
     });
   }
@@ -41,8 +53,8 @@ class Apartments {
     imageMap['rows'].forEach((image) {
       int homeId = image['homeid'];
       String imageName = image['imagename'];
-      for(int index = 0; index < apartments.length; index++) {
-        if(apartments[index].id == homeId) {
+      for (int index = 0; index < apartments.length; index++) {
+        if (apartments[index].id == homeId) {
           apartments[index].image = imageName;
         }
       }
@@ -64,9 +76,9 @@ class Apartments {
       1401,
       1133,
     );
-    
+
     apartments.add(apartment);
-    
+
     apartment = Apartment(
       2,
       'Birger Jarlsgatan 102 B',
@@ -81,9 +93,9 @@ class Apartments {
       1402,
       1586,
     );
-    
+
     apartments.add(apartment);
-    
+
     apartment = Apartment(
       3,
       'Birger Jarlsgatan 83',
@@ -98,7 +110,7 @@ class Apartments {
       1301,
       8040,
     );
-    
+
     apartments.add(apartment);
   }
 }

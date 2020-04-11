@@ -4,7 +4,7 @@ class Home {
   final int id;
   final String address;
   final String description;
-  final double livingSpace;
+  final int livingSpace;
   final double rooms;
   final int built;
   final int price;
