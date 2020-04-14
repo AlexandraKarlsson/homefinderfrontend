@@ -6,6 +6,7 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 import 'main_drawer.dart';
+import 'add_home.dart';
 import '../widgets/home_list_item.dart';
 import '../data/apartments.dart';
 import '../data/apartment.dart';
@@ -30,8 +31,9 @@ class _HomeListState extends State<HomeList> {
   var _isLoading = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    print('initState running...');
 
     if (_isInit) {
       setState(() {
@@ -162,6 +164,13 @@ class _HomeListState extends State<HomeList> {
               ),
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, AddHome.PATH);
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.lightBlue[300],
         ),
       );
     }

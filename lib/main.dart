@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './pages/add_home.dart';
 import './pages/home_list.dart';
 import './data/settings.dart';
 import 'test.dart';
@@ -10,6 +11,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    print('build in myApp running...');
+
     return ChangeNotifierProvider<Settings>(
       create: (context) => Settings(),
       child: MaterialApp(
@@ -20,6 +24,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => HomeList(),
+          AddHome.PATH: (context) => AddHome(),
           // HomeDetail.HOME_PATH: (context) => HomeDetail(),
           Test.TEST_PATH: (context) => Test(),
         },
