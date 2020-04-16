@@ -52,25 +52,20 @@ class _ImageViewerState extends State<ImageViewer> {
             child: Image.network(
               'http://10.0.2.2:8010/${widget.images[index]}',
             ),
-            /*
-            Image.asset(
-              'assets/images/${widget.images[index]}',
-            ),*/
-            
             onPanDown: (details) {
-              print('onPanDown called with $details');
+              // print('onPanDown called with $details');
               x = 0;
               y = 0;
-              print('x = $x, y= $y');
+              // print('x = $x, y= $y');
             },
             onPanUpdate: (details) {
-              print('onPanUpdate called with $details');
+              // print('onPanUpdate called with $details');
               x += details.delta.dx;
               y += details.delta.dy;
-              print('x = $x, y= $y');
+              // print('x = $x, y= $y');
             },
             onPanEnd: (details) {
-              print('onPanEnd called with $details');
+              // print('onPanEnd called with $details');
               if (x.abs() > MIN_X_VALUE && y.abs() < (x.abs() / MAX_Y_FACTOR)) {
                 if (x > 0) {
                   if (index > 0) {
@@ -88,7 +83,7 @@ class _ImageViewerState extends State<ImageViewer> {
               }
             },
             onPanCancel: () {
-              print('onPanCancel called');
+              // print('onPanCancel called');
             },
           ),
         ),
