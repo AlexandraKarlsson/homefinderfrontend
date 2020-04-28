@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import 'main_drawer.dart';
 import 'add_home.dart';
+import 'add_images.dart';
 import '../widgets/home_list_item.dart';
 import '../data/apartments.dart';
 import '../data/apartment.dart';
@@ -167,7 +168,8 @@ class _HomeListState extends State<HomeList> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, AddHome.PATH);
+            // Navigator.pushNamed(context, AddHome.PATH);
+            Navigator.pushNamed(context, AddImages.PATH, arguments: 10);
           },
           child: Icon(Icons.add),
           backgroundColor: Colors.lightBlue[300],
