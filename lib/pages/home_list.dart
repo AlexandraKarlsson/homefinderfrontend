@@ -169,7 +169,7 @@ class _HomeListState extends State<HomeList> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             // Navigator.pushNamed(context, AddHome.PATH);
-            Navigator.pushNamed(context, AddImages.PATH, arguments: 10);
+            Navigator.pushNamed(context, AddImages.PATH, arguments: 6);
           },
           child: Icon(Icons.add),
           backgroundColor: Colors.lightBlue[300],

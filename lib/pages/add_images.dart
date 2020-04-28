@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+
 import './add_image.dart';
 
 class ImageInfo {
@@ -49,12 +52,19 @@ class _AddImagesState extends State<AddImages> {
               icon: Icon(Icons.check),
               onPressed: () {
                 _imageFiles.forEach((imageInfo) {
-                print('Uploading image');
-                // TODO: upload picture to homefinderimages
-                print('Inserting imagename in database with foreign key =homeid');
-                // TODO: add filename to database
+                  print('Uploading image');
+                  // TODO: upload picture to homefinderimages
+                  print(
+                      'Inserting imagename in database with foreign key =homeid');
+                  var imageData = {
+                    "imagename": imageInfo.name,
+                    "homeid": widget._homeId
+                  };
+                  _saveImage(imageData);
+                  // TODO: add filename to database
                 });
                 // TODO: Navigating back to homelist page
+                //Navigator.pushNamed(context, AddImages.PATH, arguments: homeId);
               },
             ),
           ],
@@ -67,9 +77,31 @@ class _AddImagesState extends State<AddImages> {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen.
     final _imageFile = await Navigator.pushNamed(context, AddImage.PATH);
-    String imageName = 'house-${widget._homeId}_${_imageFiles.length+1}';
+    String imageName = 'house-${widget._homeId}_${_imageFiles.length + 4}';
     ImageInfo image = ImageInfo(_imageFile, imageName);
     print('imageFile = ${image.file}, imageName = ${image.name}');
     _imageFiles.add(image);
+  }
+
+  Future<void> _saveImage(dynamic image) async {
+    var url = 'http://10.0.2.2:8000/image';
+    var headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8'
+    };
+
+    var newImageJson = convert.jsonEncode(image);
+    print('newImageJson = $newImageJson');
+
+    // Await the http get response, then decode the json-formatted response.
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: newImageJson,
+    );
+    if (response.statusCode == 201) {
+      print('response ${response.body}');
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
   }
 }
