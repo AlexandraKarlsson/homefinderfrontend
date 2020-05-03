@@ -5,37 +5,34 @@ import 'package:flutter/widgets.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
-import './add_image.dart';
+import 'add_image.dart';
+import 'home_list.dart';
+import '../widgets/add_image_item.dart';
+import '../data/image_data.dart';
 
-class ImageInfo {
-  final File file;
-  final String name;
-
-  ImageInfo(this.file, this.name);
-}
 
 class AddImages extends StatefulWidget {
   static const PATH = 'addImages';
-  int _homeId;
 
   @override
   _AddImagesState createState() => _AddImagesState();
 }
 
 class _AddImagesState extends State<AddImages> {
-  List<ImageInfo> _imageFiles = List<ImageInfo>();
+  int _homeId;
+  List<ImageData> _imageFiles = List<ImageData>();
 
   @override
   Widget build(BuildContext context) {
-    widget._homeId = ModalRoute.of(context).settings.arguments;
-    print('_homeId = ${widget._homeId}');
+    _homeId = ModalRoute.of(context).settings.arguments;
+    print('_homeId = $_homeId');
 
     return Scaffold(
       appBar: AppBar(title: Text('Lägg till bilder')),
       body: ListView.builder(
           itemCount: _imageFiles.length,
           itemBuilder: (BuildContext context, int index) {
-            return Text(_imageFiles[index].name);
+            return AddImageItem(_imageFiles[index]);
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -53,18 +50,16 @@ class _AddImagesState extends State<AddImages> {
               onPressed: () {
                 _imageFiles.forEach((imageInfo) {
                   print('Uploading image');
-                  // TODO: upload picture to homefinderimages
+                  _uploadImage(imageInfo);
                   print(
                       'Inserting imagename in database with foreign key =homeid');
                   var imageData = {
                     "imagename": imageInfo.name,
-                    "homeid": widget._homeId
+                    "homeid": _homeId
                   };
                   _saveImage(imageData);
-                  // TODO: add filename to database
                 });
-                // TODO: Navigating back to homelist page
-                //Navigator.pushNamed(context, AddImages.PATH, arguments: homeId);
+                Navigator.pushNamed(context, HomeList.PATH);
               },
             ),
           ],
@@ -73,12 +68,13 @@ class _AddImagesState extends State<AddImages> {
     );
   }
 
-  _addImage(BuildContext context) async {
+  void _addImage(BuildContext context) async {
     // Navigator.push returns a Future that completes after calling
     // Navigator.pop on the Selection Screen.
-    final _imageFile = await Navigator.pushNamed(context, AddImage.PATH);
-    String imageName = 'house-${widget._homeId}_${_imageFiles.length + 4}';
-    ImageInfo image = ImageInfo(_imageFile, imageName);
+    dynamic _imageFile = await Navigator.pushNamed(context, AddImage.PATH);
+    String extention = _imageFile.path.split(".").last;
+    String imageName = 'house-${_homeId}_${_imageFiles.length + 4}.$extention';
+    ImageData image = ImageData(_imageFile, imageName);
     print('imageFile = ${image.file}, imageName = ${image.name}');
     _imageFiles.add(image);
   }
@@ -104,4 +100,19 @@ class _AddImagesState extends State<AddImages> {
       print('Request failed with status: ${response.statusCode}.');
     }
   }
+
+ Future<void> _uploadImage(ImageData image) async {
+   final String url = 'http://10.0.2.2:8040/image';
+   String base64Image = convert.base64Encode(image.file.readAsBytesSync());
+
+   http.post(url, body: {
+     "image": base64Image,
+     "name": image.name,
+   }).then((response) {
+     print(response.statusCode);
+   }).catchError((error) {
+     print(error);
+   });
+  }
+
 }

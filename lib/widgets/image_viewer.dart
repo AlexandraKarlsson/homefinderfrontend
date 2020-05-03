@@ -50,7 +50,7 @@ class _ImageViewerState extends State<ImageViewer> {
         Container(
           child: GestureDetector(
             child: Image.network(
-              'http://10.0.2.2:8010/${widget.images[index]}',
+              'http://10.0.2.2:8040/images/${widget.images[index]}',
             ),
             onPanDown: (details) {
               // print('onPanDown called with $details');

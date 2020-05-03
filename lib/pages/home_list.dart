@@ -20,6 +20,8 @@ import '../data/settings.dart';
 // Houses houses = Houses();
 
 class HomeList extends StatefulWidget {
+  static const PATH = 'list';
+
   @override
   _HomeListState createState() => _HomeListState();
 }

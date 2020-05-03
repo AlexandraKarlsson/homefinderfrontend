@@ -74,10 +74,7 @@ class _AddImageState extends State<AddImage> {
               },
               child: Icon(Icons.check),
               backgroundColor: Colors.lightBlue[300],
-            )
-            // TODO: upload image to backend
-            // LinearProgressIndicator(value: progressPercent),
-            // Text()
+            ),
           ],
         ],
       ),

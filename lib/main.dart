@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => HomeList(),
+          HomeList.PATH: (context) => HomeList(),
           AddHome.PATH: (context) => AddHome(),
           AddImages.PATH: (context) => AddImages(),
           AddImage.PATH: (context) => AddImage(),
