@@ -11,6 +11,7 @@ class Home {
   final int operationCost;
   String image;
   List<String> images;
+  int brokerId;
 
   Home(
     this.id,
@@ -23,6 +24,7 @@ class Home {
     this.operationCost,
     this.image,
     this.images,
+    this.brokerId,
   );
 
   static String formatCurrency(int price, String unit) {

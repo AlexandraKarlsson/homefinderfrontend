@@ -10,35 +10,58 @@ import './add_images.dart';
 
 const navigationStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
-class AddHome extends StatefulWidget {
-  static const PATH = 'addHome';
+class AddHouse extends StatefulWidget {
+  static const PATH = 'addHouse';
 
   @override
-  _AddHomeState createState() => _AddHomeState();
+  _AddHouseState createState() => _AddHouseState();
 }
 
-class _AddHomeState extends State<AddHome> {
+class _AddHouseState extends State<AddHouse> {
   final _formKey = GlobalKey<FormState>();
   HouseData houseData = HouseData();
-  ApartmentData apartmentData = ApartmentData();
+  int homeId;
 
-  int _selectedIndex = 0;
   bool _isSaving = false;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+    Future<void> saveData() async {
+    var url = 'http://10.0.2.2:8000/house';
+    var headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8'
+    };
+    var newHouseData = {
+      'address': houseData.address,
+      'description': houseData.description,
+      'livingspace': houseData.livingSpace,
+      'rooms': houseData.rooms,
+      'built': houseData.built,
+      'price': houseData.price,
+      'operationcost': houseData.operationCost,
+      'cadastral': houseData.cadastral,
+      'structure': houseData.structure,
+      'plotsize': houseData.plotSize,
+      'ground': houseData.ground
+    };
 
-  /* Ändra till nesan ?
-      child: new Form(
-      key: this._formKey,
-        child: SingleChildScrollView(
-          child: new Column(
-            children: <Widget>[
-              new TextFormField(
-  */
+    var newHouseDataJson = convert.jsonEncode(newHouseData);
+    print('NewHouseDataJson = $newHouseDataJson');
+
+    // Await the http get response, then decode the json-formatted response.
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: newHouseDataJson,
+    );
+    if (response.statusCode == 201) {
+      print('response ${response.body}');
+      var responseData =
+          convert.jsonDecode(response.body) as Map<String, dynamic>;
+      homeId = responseData['homeId'];
+      print('HomeId = $homeId');
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+  }
 
   Widget buildHouseForm(BuildContext context) {
     return Container(
@@ -232,11 +255,12 @@ class _AddHomeState extends State<AddHome> {
                   setState(() {
                     _isSaving = true;
                   });
-                  // TODO: access and send data to backend
                   saveData().then((_) {
                     setState(() {
                       _isSaving = false;
                     });
+                    Navigator.pushNamed(context, AddImages.PATH,
+                        arguments: homeId);
                   });
                 }
               },
@@ -248,53 +272,6 @@ class _AddHomeState extends State<AddHome> {
     );
   }
 
-  Future<void> saveData() async {
-    var url = 'http://10.0.2.2:8000/house';
-    var headers = <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8'
-    };
-    var newHouseData = {
-      'address': houseData.address,
-      'description': houseData.description,
-      'livingspace': houseData.livingSpace,
-      'rooms': houseData.rooms,
-      'built': houseData.built,
-      'price': houseData.price,
-      'operationcost': houseData.operationCost,
-      'cadastral': houseData.cadastral,
-      'structure': houseData.structure,
-      'plotsize': houseData.plotSize,
-      'ground': houseData.ground
-    };
-
-    var newHouseDataJson = convert.jsonEncode(newHouseData);
-    print('NewHouseDataJson = $newHouseDataJson');
-
-    // Await the http get response, then decode the json-formatted response.
-    final response = await http.post(
-      url,
-      headers: headers,
-      body: newHouseDataJson,
-    );
-    if (response.statusCode == 201) {
-      print('response ${response.body}');
-      var responseData =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      int homeId = responseData['homeId'];
-      print('HomeId = $homeId');
-      Navigator.pushNamed(context, AddImages.PATH, arguments: homeId);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-  }
-
-  Widget buildApartmentForm() {
-    return Container(
-      color: Colors.blue[50],
-      child: Text('Build Apartment!'),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_isSaving) {
@@ -302,26 +279,7 @@ class _AddHomeState extends State<AddHome> {
     } else {
       return Scaffold(
         appBar: AppBar(title: Text('Lägg till hem')),
-        body: _selectedIndex == 0
-            ? buildHouseForm(context)
-            : buildApartmentForm(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              backgroundColor: Colors.lightBlue,
-              icon: Icon(Icons.home),
-              title: Text('Hus', style: navigationStyle),
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.lightBlue,
-              icon: Icon(Icons.business),
-              title: Text('Lägenhet', style: navigationStyle),
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.blue[800],
-          onTap: _onItemTapped,
-        ),
+        body: buildHouseForm(context),
       );
     }
   }

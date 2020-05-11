@@ -8,14 +8,16 @@ import 'package:http/http.dart' as http;
 import '../data/apartment.dart';
 import '../data/house.dart';
 import '../data/home.dart';
+import '../data/broker.dart';
 import '../widgets/image_viewer.dart';
 import '../widgets/home_item.dart';
 
 class HomeDetail extends StatefulWidget {
   static const HOME_PATH = 'home';
   final Home home;
+  final Broker broker;
 
-  HomeDetail(this.home);
+  HomeDetail(this.home, this.broker);
 
   @override
   _HomeDetailState createState() => _HomeDetailState();
@@ -164,6 +166,19 @@ class _HomeDetailState extends State<HomeDetail> {
                       ),
                     )
                   ],
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.account_circle),
+                  title: Text(
+                    widget.broker.name,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  subtitle:
+                      Text(widget.broker.email, style: TextStyle(fontSize: 12)),
+                  trailing:
+                      Text(widget.broker.phone, style: TextStyle(fontSize: 12)),
                 ),
               ),
             ],

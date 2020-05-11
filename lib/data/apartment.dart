@@ -32,6 +32,7 @@ class Apartment extends Home {
     operationCost,
     image,
     images,
+    brokerId,
     this.apartmentNumber,
     this.charge,
   ) : super(
@@ -45,6 +46,7 @@ class Apartment extends Home {
           operationCost,
           image,
           images,
+          brokerId,
         );
   
   static String formatCharge(int charge) {

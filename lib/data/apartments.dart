@@ -30,6 +30,7 @@ class Apartments {
       int operationCost = apartment['operationcost'];
       String image = apartment['image'];
       List<String> images = apartment['images'];
+      int brokerId = apartment['brokerid'];
       int apartmentNumber = apartment['apartmentnumber'];
       int charge = apartment['charge'];
       Apartment newApartment = Apartment(
@@ -43,6 +44,7 @@ class Apartments {
           operationCost,
           image,
           images,
+          brokerId,
           apartmentNumber,
           charge);
       apartments.add(newApartment);
@@ -73,6 +75,7 @@ class Apartments {
       350,
       'apartment-1_1.jpg',
       ['apartment-1_1.jpg', 'apartment-1_2.jpg', 'apartment-1_3.jpg'],
+      1,
       1401,
       1133,
     );
@@ -90,6 +93,7 @@ class Apartments {
       500,
       'apartment-2_1.jpg',
       ['apartment-2_1.jpg' /*, 'apartment-2_2.jpg', 'apartment-2_3.jpg'*/],
+      2,
       1402,
       1586,
     );
@@ -107,6 +111,7 @@ class Apartments {
       1000,
       'apartment-3_1.jpg',
       ['apartment-3_1.jpg' /*, 'apartment-3_2.jpg', 'apartment-3_3.jpg'*/],
+      3,
       1301,
       8040,
     );

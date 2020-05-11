@@ -19,6 +19,7 @@ class Houses {
       int operationCost = house['operationcost'];
       String image = house['image'];
       List<String> images = house['images'];
+      int brokerId = house['brokerid'];
       String cadastral = house['cadastral'];
       String structure = house['structure'];
       int plotSize = house['plotsize'];
@@ -34,6 +35,7 @@ class Houses {
         operationCost,
         image,
         images,
+        brokerId,
         cadastral,
         structure,
         plotSize,
@@ -55,6 +57,7 @@ class Houses {
       33512,
       'apartment-1_1.jpg',
       ['apartment-1_1.jpg', 'apartment-1_2.jpg', 'apartment-1_3.jpg'],
+      1,
       'Sigtuna Lunda-Mörby 5:19',
       'Villa 1.5 plan',
       3011,
@@ -74,6 +77,7 @@ class Houses {
       30750,
       'apartment-2_1.jpg',
       ['apartment-2_1.jpg' /*, 'apartment-2_2.jpg', 'apartment-2_3.jpg'*/],
+      4,
       'Norrtälje Bergshamra 1:72',
       '1-planshus',
       1329,
@@ -93,6 +97,7 @@ class Houses {
       35646,
       'apartment-3_1.jpg',
       ['apartment-3_1.jpg' /*, 'apartment-3_2.jpg', 'apartment-3_3.jpg'*/],
+      5,
       'Norrtälje Baltora 2:85',
       '1-planshus',
       2278,

@@ -6,9 +6,8 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 import 'main_drawer.dart';
-import 'add_home.dart';
-import 'add_images.dart';
 import '../widgets/home_list_item.dart';
+import '../data/brokers.dart';
 import '../data/apartments.dart';
 import '../data/apartment.dart';
 import '../data/houses.dart';
@@ -27,6 +26,7 @@ class HomeList extends StatefulWidget {
 }
 
 class _HomeListState extends State<HomeList> {
+  Brokers brokers;
   Apartments apartments; //  = Apartments();
   Houses houses; //  = Houses();
 
@@ -52,13 +52,29 @@ class _HomeListState extends State<HomeList> {
   }
 
   Future<void> fetchData() async {
-    if (apartments == null) {
-      apartments = Apartments();
-      houses = Houses();
-      await fetchApartments();
-      await fetchHouses();
-      Map<String, dynamic> imageMap = await fetchImage();
-      setImage(imageMap);
+    //if (apartments == null) {
+    brokers = Brokers();
+    apartments = Apartments();
+    houses = Houses();
+    await fetchBrokers();
+    await fetchApartments();
+    await fetchHouses();
+    Map<String, dynamic> imageMap = await fetchImage();
+    setImage(imageMap);
+    //}
+  }
+
+  Future<void> fetchBrokers() async {
+    var url = 'http://10.0.2.2:8000/broker';
+
+    var response = await http.get(url);
+    print('response ${response.body}');
+    if (response.statusCode == 200) {
+      final brokerData =
+          convert.json.decode(response.body) as Map<String, dynamic>;
+      brokers.add(brokerData);
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
     }
   }
 
@@ -161,20 +177,12 @@ class _HomeListState extends State<HomeList> {
                 child: ListView.builder(
                   itemCount: homeList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return HomeListItem(home: homeList[index]);
+                    return HomeListItem(home: homeList[index], broker: brokers.brokers[homeList[index].brokerId]);
                   },
                 ),
               ),
             ),
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // Navigator.pushNamed(context, AddHome.PATH);
-            Navigator.pushNamed(context, AddImages.PATH, arguments: 6);
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.lightBlue[300],
         ),
       );
     }

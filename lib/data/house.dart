@@ -17,6 +17,7 @@ class House extends Home {
     operationCost,
     image,
     images,
+    brokerId,
     this.cadastral,
     this.structure,
     this.plotSize,
@@ -32,5 +33,6 @@ class House extends Home {
           operationCost,
           image,
           images,
+          brokerId,
         );
 }

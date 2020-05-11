@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './pages/add_home.dart';
+import './pages/add_house.dart';
 import './pages/add_images.dart';
 import './pages/add_image.dart';
 import './pages/home_list.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => HomeList(),
           HomeList.PATH: (context) => HomeList(),
-          AddHome.PATH: (context) => AddHome(),
+          AddHouse.PATH: (context) => AddHouse(),
           AddImages.PATH: (context) => AddImages(),
           AddImage.PATH: (context) => AddImage(),
           // HomeDetail.HOME_PATH: (context) => HomeDetail(),
