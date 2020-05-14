@@ -5,53 +5,51 @@ import 'package:provider/provider.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
-import '../data/house_data.dart';
+import '../data/apartment_data.dart';
 import './add_images.dart';
 import '../data/brokers.dart';
 
 const navigationStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
-class AddHouse extends StatefulWidget {
+class AddApartment extends StatefulWidget {
   static const PATH = 'addHouse';
 
   @override
-  _AddHouseState createState() => _AddHouseState();
+  _AddApartmentState createState() => _AddApartmentState();
 }
 
-class _AddHouseState extends State<AddHouse> {
+class _AddApartmentState extends State<AddApartment> {
   final _formKey = GlobalKey<FormState>();
-  ApartmentData houseData = ApartmentData();
+  ApartmentData apartmentData = ApartmentData();
   int homeId;
 
   bool _isSaving = false;
 
   Future<void> saveData() async {
-    var url = 'http://10.0.2.2:8000/house';
+    var url = 'http://10.0.2.2:8000/apartment';
     var headers = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8'
     };
-    var newHouseData = {
-      'address': houseData.address,
-      'description': houseData.description,
-      'livingspace': houseData.livingSpace,
-      'rooms': houseData.rooms,
-      'built': houseData.built,
-      'price': houseData.price,
-      'operationcost': houseData.operationCost,
-      'cadastral': houseData.cadastral,
-      'structure': houseData.structure,
-      'plotsize': houseData.plotSize,
-      'ground': houseData.ground
+    var newApartmentData = {
+      'address': apartmentData.address,
+      'description': apartmentData.description,
+      'livingspace': apartmentData.livingSpace,
+      'rooms': apartmentData.rooms,
+      'built': apartmentData.built,
+      'price': apartmentData.price,
+      'operationcost': apartmentData.operationCost,
+      'apartmentnumber': apartmentData.apartmentNumber,
+      'charge': apartmentData.charge,
     };
 
-    var newHouseDataJson = convert.jsonEncode(newHouseData);
-    print('NewHouseDataJson = $newHouseDataJson');
+    var newApartmentDataJson = convert.jsonEncode(newApartmentData);
+    print('newApartmentDataJson = $newApartmentDataJson');
 
     // Await the http get response, then decode the json-formatted response.
     final response = await http.post(
       url,
       headers: headers,
-      body: newHouseDataJson,
+      body: newApartmentDataJson,
     );
     if (response.statusCode == 201) {
       print('response ${response.body}');
@@ -64,10 +62,10 @@ class _AddHouseState extends State<AddHouse> {
     }
   }
 
-  Widget buildHouseForm(BuildContext context) {
+  Widget buildApartmentForm(BuildContext context) {
     Brokers brokers = Provider.of<Brokers>(context, listen: false);
-    print('Brokers.length = ${brokers.brokers.length}');
-    print('Brokers id 1 = ${brokers.brokers[1].name}');
+    // print('Brokers.length = ${brokers.brokers.length}');
+    // print('Brokers id 1 = ${brokers.brokers[1].name}');
     return Container(
       padding: EdgeInsets.all(8),
       color: Colors.blue[50],
@@ -81,13 +79,11 @@ class _AddHouseState extends State<AddHouse> {
                   children: <Widget>[
                     TextFormField(
                       decoration: const InputDecoration(
-                        // icon: Icon(Icons.person),
-                        // hintText: 'Wha',
                         labelText: 'Adress',
                       ),
                       onSaved: (String value) {
                         print('Address onSaved() running...');
-                        houseData.address = value;
+                        apartmentData.address = value;
                       },
                       validator: (String value) {
                         return value.isEmpty
@@ -101,7 +97,7 @@ class _AddHouseState extends State<AddHouse> {
                       ),
                       maxLines: 4,
                       onSaved: (String value) {
-                        houseData.description = value;
+                        apartmentData.description = value;
                       },
                       validator: (String value) {
                         return value.isEmpty
@@ -118,7 +114,7 @@ class _AddHouseState extends State<AddHouse> {
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
                       onSaved: (String value) {
-                        houseData.livingSpace = int.parse(value);
+                        apartmentData.livingSpace = int.parse(value);
                       },
                       validator: (String value) {
                         return value.isEmpty
@@ -135,7 +131,7 @@ class _AddHouseState extends State<AddHouse> {
                         //WhitelistingTextInputFormatter(RegExp('^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?\$')),
                       ],
                       onSaved: (String value) {
-                        houseData.rooms = double.parse(value);
+                        apartmentData.rooms = double.parse(value);
                       },
                       validator: (String value) {
                         return value.isEmpty
@@ -148,7 +144,7 @@ class _AddHouseState extends State<AddHouse> {
                         labelText: 'Byggnadsår',
                       ),
                       onSaved: (String value) {
-                        houseData.built = int.parse(value);
+                        apartmentData.built = int.parse(value);
                       },
                       validator: (String value) {
                         return value.isEmpty
@@ -165,7 +161,7 @@ class _AddHouseState extends State<AddHouse> {
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
                       onSaved: (String value) {
-                        houseData.price = int.parse(value);
+                        apartmentData.price = int.parse(value);
                       },
                       validator: (String value) {
                         return value.isEmpty
@@ -182,7 +178,7 @@ class _AddHouseState extends State<AddHouse> {
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
                       onSaved: (String value) {
-                        houseData.operationCost = int.parse(value);
+                        apartmentData.operationCost = int.parse(value);
                       },
                       validator: (String value) {
                         return value.isEmpty
@@ -192,57 +188,35 @@ class _AddHouseState extends State<AddHouse> {
                     ),
                     TextFormField(
                       decoration: const InputDecoration(
-                        labelText: 'Fastighetsbeteckning',
-                      ),
-                      onSaved: (String value) {
-                        houseData.cadastral = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i fastighetsbeteckning'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Byggnadstyp',
-                      ),
-                      onSaved: (String value) {
-                        houseData.structure = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll byggnadstyp'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Tomtarea',
+                        labelText: 'Lägenhetsnummer',
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
                         WhitelistingTextInputFormatter.digitsOnly,
                       ],
                       onSaved: (String value) {
-                        houseData.plotSize = int.parse(value);
+                        apartmentData.apartmentNumber = int.parse(value);
                       },
                       validator: (String value) {
                         return value.isEmpty
-                            ? 'Var vänlig och fyll i tomtarean'
+                            ? 'Var vänlig och fyll i lägenhetsnummret'
                             : null;
                       },
                     ),
                     TextFormField(
                       decoration: const InputDecoration(
-                        labelText: 'Grund',
+                        labelText: 'Hyra',
                       ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly,
+                      ],
                       onSaved: (String value) {
-                        houseData.ground = value;
+                        apartmentData.charge = int.parse(value);
                       },
                       validator: (String value) {
                         return value.isEmpty
-                            ? 'Var vänlig och fyll i grund'
+                            ? 'Var vänlig och fyll i hyran'
                             : null;
                       },
                     ),
@@ -250,11 +224,11 @@ class _AddHouseState extends State<AddHouse> {
                       items: createDropDownMenuItems(brokers),
                       onChanged: (String value) {
                         setState(() {
-                          houseData.brokerId = int.parse(value);
+                          apartmentData.brokerId = int.parse(value);
                         });
                       },
                       hint: Text('Välj mäklare'),
-                      value: houseData.brokerId.toString(),
+                      value: apartmentData.brokerId.toString(),
                     ),
                   ],
                 ),
@@ -265,7 +239,7 @@ class _AddHouseState extends State<AddHouse> {
                 // Validate returns true if the form is valid, otherwise false.
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
-                  print('House address = ${houseData.address}');
+                  print('Apartment address = ${apartmentData.address}');
                   setState(() {
                     _isSaving = true;
                   });
@@ -288,16 +262,14 @@ class _AddHouseState extends State<AddHouse> {
 
   List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
     List<DropdownMenuItem<String>> menuItems = [];
-    brokers.brokers.forEach((key,broker) => {
-      menuItems.add(DropdownMenuItem<String>(
-        child: Text(broker.name),
-        value: '${broker.id}',
-      ))
-    });
-    print('End of createDropDownMenyItems length = ${menuItems.length}');
-    menuItems.forEach((item) => {
-      print('${item.value} : ${item.child}')
-    });
+    brokers.brokers.forEach((key, broker) => {
+          menuItems.add(DropdownMenuItem<String>(
+            child: Text(broker.name),
+            value: '${broker.id}',
+          ))
+        });
+    // print('End of createDropDownMenyItems length = ${menuItems.length}');
+    // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
     return menuItems;
   }
 
@@ -307,10 +279,9 @@ class _AddHouseState extends State<AddHouse> {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
-        appBar: AppBar(title: Text('Lägg till hus')),
-        body: buildHouseForm(context),
+        appBar: AppBar(title: Text('Lägg till lägenhet')),
+        body: buildApartmentForm(context),
       );
     }
   }
 }
-

@@ -148,6 +148,10 @@ class _HomeListState extends State<HomeList> {
       return Center(child: CircularProgressIndicator());
     } else {
       Settings settings = Provider.of<Settings>(context);
+      Brokers brokersContext = Provider.of<Brokers>(context);
+      brokers.brokers.forEach((key,broker) => {
+        brokersContext.addIfNotExists(broker)
+      });
 
       List<Home> homeListTemp = List<Home>();
       if (settings.showApartment) {
@@ -177,7 +181,10 @@ class _HomeListState extends State<HomeList> {
                 child: ListView.builder(
                   itemCount: homeList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return HomeListItem(home: homeList[index], broker: brokers.brokers[homeList[index].brokerId]);
+                    return HomeListItem(
+                        home: homeList[index],
+                        // TODO: remove broker parameter
+                        broker: brokers.brokers[homeList[index].brokerId]);
                   },
                 ),
               ),

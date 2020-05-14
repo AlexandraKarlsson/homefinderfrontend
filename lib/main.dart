@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './pages/add_house.dart';
-import './pages/add_images.dart';
-import './pages/add_image.dart';
-import './pages/home_list.dart';
-import './data/settings.dart';
+
+import 'pages/add_house.dart';
+import 'pages/add_apartment.dart';
+import 'pages/add_images.dart';
+import 'pages/add_image.dart';
+import 'pages/home_list.dart';
+
+import 'data/settings.dart';
+import 'data/brokers.dart';
+
 import 'test.dart';
 
 /*
@@ -18,11 +23,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     print('build in myApp running...');
 
-    return ChangeNotifierProvider<Settings>(
-      create: (context) => Settings(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Settings>(create: (_) => Settings()),
+        Provider<Brokers>(create: (_) => Brokers()),
+      ],
       child: MaterialApp(
         title: 'Hitta hemmet',
         theme: ThemeData(
@@ -33,6 +40,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => HomeList(),
           HomeList.PATH: (context) => HomeList(),
           AddHouse.PATH: (context) => AddHouse(),
+          AddApartment.PATH: (context) => AddApartment(),
           AddImages.PATH: (context) => AddImages(),
           AddImage.PATH: (context) => AddImage(),
           // HomeDetail.HOME_PATH: (context) => HomeDetail(),

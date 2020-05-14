@@ -20,5 +20,11 @@ void add(Map<String, dynamic> brokerMap) {
       brokers[newBroker.id] = newBroker;
     });
   }
+
+  void addIfNotExists(Broker broker) {
+    if(brokers[broker.id] == null) {
+      brokers[broker.id] = broker;
+    }
+  }
   
 }

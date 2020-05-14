@@ -7,4 +7,5 @@ class HomeData {
   int built;
   int price;
   int operationCost;
+  int brokerId = 1;
 }

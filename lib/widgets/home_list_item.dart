@@ -26,7 +26,7 @@ class HomeListItem extends StatelessWidget {
           },
           child: ListTile(
             leading: Image.network(
-              'http://10.0.2.2:8040/images/${home.image}',
+              'http://10.0.2.2:8010/images/${home.image}',
             ),
             /* Image.asset(
               'assets/images/${home.image}',

@@ -1,6 +1,6 @@
 import 'home_data.dart';
 
-class HouseData extends HomeData {
+class ApartmentData extends HomeData {
   String cadastral;
   String structure;
   int plotSize;

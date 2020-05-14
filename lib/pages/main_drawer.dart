@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'home_list.dart';
 import 'add_house.dart';
+import 'add_apartment.dart';
+
 import '../data/settings.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -117,7 +120,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     padding: const EdgeInsets.all(8.0),
                     child: RaisedButton(
                       onPressed: () {
-                        // Navigator.pushNamed(context, AddApartment.PATH);
+                        Navigator.pushNamed(context, AddApartment.PATH);
                       },
                       child: const Text('Lägenhet', style: TextStyle(fontSize: 16)),
                     ),
@@ -131,14 +134,3 @@ class _MainDrawerState extends State<MainDrawer> {
     );
   }
 }
-
-/* 
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // Navigator.pushNamed(context, AddHome.PATH);
-            Navigator.pushNamed(context, AddImages.PATH, arguments: 6);
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.lightBlue[300],
-        ),
-*/
