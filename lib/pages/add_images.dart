@@ -102,7 +102,7 @@ class _AddImagesState extends State<AddImages> {
   }
 
  Future<void> _uploadImage(ImageData image) async {
-   final String url = 'http://10.0.2.2:8040/image';
+   final String url = 'http://10.0.2.2:8010/image';
    String base64Image = convert.base64Encode(image.file.readAsBytesSync());
 
    http.post(url, body: {

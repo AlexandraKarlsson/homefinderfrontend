@@ -43,7 +43,7 @@ class _HomeListState extends State<HomeList> {
         _isLoading = true;
       });
     }
-    fetchData().then((_) {
+    fetch().then((_) {
       setState(() {
         _isInit = false;
         _isLoading = false;
@@ -51,7 +51,7 @@ class _HomeListState extends State<HomeList> {
     });
   }
 
-  Future<void> fetchData() async {
+  Future<void> fetch() async {
     //if (apartments == null) {
     brokers = Brokers();
     apartments = Apartments();
@@ -59,23 +59,26 @@ class _HomeListState extends State<HomeList> {
     await fetchBrokers();
     await fetchApartments();
     await fetchHouses();
-    Map<String, dynamic> imageMap = await fetchImage();
-    setImage(imageMap);
+    await fetchImage();
     //}
+  }
+
+  Future<Map<String, dynamic>> fetchData(String url) async {
+    var data;
+    var response = await http.get(url);
+    print('response ${response.body}');
+    if (response.statusCode == 200) {
+      data = convert.json.decode(response.body) as Map<String, dynamic>;
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return data;
   }
 
   Future<void> fetchBrokers() async {
     var url = 'http://10.0.2.2:8000/broker';
-
-    var response = await http.get(url);
-    print('response ${response.body}');
-    if (response.statusCode == 200) {
-      final brokerData =
-          convert.json.decode(response.body) as Map<String, dynamic>;
-      brokers.add(brokerData);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    final brokerData = await fetchData(url);
+    brokers.add(brokerData);
   }
 
   void setImage(Map<String, dynamic> imageMap) {
@@ -99,47 +102,20 @@ class _HomeListState extends State<HomeList> {
 
   Future<Map<String, dynamic>> fetchImage() async {
     var url = 'http://10.0.2.2:8000/homes/image';
-    Map<String, dynamic> imageData;
-
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      // print('response ${response.body}');
-      imageData = convert.json.decode(response.body) as Map<String, dynamic>;
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
-    return imageData;
+    final imageData = await fetchData(url);
+    setImage(imageData);
   }
 
   Future<void> fetchApartments() async {
     var url = 'http://10.0.2.2:8000/apartment';
-
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      // print('response ${response.body}');
-      final apartmentData =
-          convert.json.decode(response.body) as Map<String, dynamic>;
-      apartments.add(apartmentData);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    final apartmentData = await fetchData(url);
+    apartments.add(apartmentData);
   }
 
   Future<void> fetchHouses() async {
     var url = 'http://10.0.2.2:8000/house';
-
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      // print('response ${response.body}');
-      final houseData =
-          convert.json.decode(response.body) as Map<String, dynamic>;
-      houses.add(houseData);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    final houseData = await fetchData(url);
+    houses.add(houseData);
   }
 
   @override
@@ -149,9 +125,8 @@ class _HomeListState extends State<HomeList> {
     } else {
       Settings settings = Provider.of<Settings>(context);
       Brokers brokersContext = Provider.of<Brokers>(context);
-      brokers.brokers.forEach((key,broker) => {
-        brokersContext.addIfNotExists(broker)
-      });
+      brokers.brokers
+          .forEach((key, broker) => {brokersContext.addIfNotExists(broker)});
 
       List<Home> homeListTemp = List<Home>();
       if (settings.showApartment) {

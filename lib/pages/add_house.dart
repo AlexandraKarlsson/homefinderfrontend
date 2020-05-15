@@ -38,6 +38,7 @@ class _AddHouseState extends State<AddHouse> {
       'built': houseData.built,
       'price': houseData.price,
       'operationcost': houseData.operationCost,
+      'brokerid': houseData.brokerId,
       'cadastral': houseData.cadastral,
       'structure': houseData.structure,
       'plotsize': houseData.plotSize,

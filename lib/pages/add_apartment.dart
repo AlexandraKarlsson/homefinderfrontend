@@ -12,7 +12,7 @@ import '../data/brokers.dart';
 const navigationStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
 class AddApartment extends StatefulWidget {
-  static const PATH = 'addHouse';
+  static const PATH = 'addApartment';
 
   @override
   _AddApartmentState createState() => _AddApartmentState();
@@ -38,6 +38,7 @@ class _AddApartmentState extends State<AddApartment> {
       'built': apartmentData.built,
       'price': apartmentData.price,
       'operationcost': apartmentData.operationCost,
+      'brokerid': apartmentData.brokerId,
       'apartmentnumber': apartmentData.apartmentNumber,
       'charge': apartmentData.charge,
     };
@@ -60,6 +61,19 @@ class _AddApartmentState extends State<AddApartment> {
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
+  }
+
+  List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
+    List<DropdownMenuItem<String>> menuItems = [];
+    brokers.brokers.forEach((key, broker) => {
+          menuItems.add(DropdownMenuItem<String>(
+            child: Text(broker.name),
+            value: '${broker.id}',
+          ))
+        });
+    // print('End of createDropDownMenyItems length = ${menuItems.length}');
+    // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
+    return menuItems;
   }
 
   Widget buildApartmentForm(BuildContext context) {
@@ -258,19 +272,6 @@ class _AddApartmentState extends State<AddApartment> {
         ),
       ),
     );
-  }
-
-  List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
-    List<DropdownMenuItem<String>> menuItems = [];
-    brokers.brokers.forEach((key, broker) => {
-          menuItems.add(DropdownMenuItem<String>(
-            child: Text(broker.name),
-            value: '${broker.id}',
-          ))
-        });
-    // print('End of createDropDownMenyItems length = ${menuItems.length}');
-    // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
-    return menuItems;
   }
 
   @override
