@@ -9,6 +9,9 @@ import '../data/house_data.dart';
 import './add_images.dart';
 import '../data/brokers.dart';
 
+import '../widgets/form_field_text.dart';
+import '../widgets/form_field_number.dart';
+
 const navigationStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
 class AddHouse extends StatefulWidget {
@@ -80,173 +83,62 @@ class _AddHouseState extends State<AddHouse> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        // icon: Icon(Icons.person),
-                        // hintText: 'Wha',
-                        labelText: 'Adress',
-                      ),
-                      onSaved: (String value) {
-                        print('Address onSaved() running...');
-                        houseData.address = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i adressen'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Beskrivning',
-                      ),
-                      maxLines: 4,
-                      onSaved: (String value) {
-                        houseData.description = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i en beskrivning'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Boarea',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        houseData.livingSpace = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i boarea'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Antal rum',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        //WhitelistingTextInputFormatter(RegExp('^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?\$')),
-                      ],
-                      onSaved: (String value) {
-                        houseData.rooms = double.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i antal rum'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Byggnadsår',
-                      ),
-                      onSaved: (String value) {
-                        houseData.built = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i byggnadsåret'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Pris',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        houseData.price = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i pris'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Driftkostnad',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        houseData.operationCost = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i driftkostnaden'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Fastighetsbeteckning',
-                      ),
-                      onSaved: (String value) {
-                        houseData.cadastral = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i fastighetsbeteckning'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Byggnadstyp',
-                      ),
-                      onSaved: (String value) {
-                        houseData.structure = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll byggnadstyp'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Tomtarea',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        houseData.plotSize = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i tomtarean'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Grund',
-                      ),
-                      onSaved: (String value) {
-                        houseData.ground = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i grund'
-                            : null;
-                      },
-                    ),
+                    FormFieldText(
+                        label: 'Adress',
+                        onSave: (String value) {
+                          houseData.address = value;
+                        }),
+                    FormFieldText(
+                        label: 'Beskrivning',
+                        onSave: (String value) {
+                          houseData.description = value;
+                        }, maxLines: 4,),
+                    FormFieldNumber(
+                        label: 'Boarea',
+                        onSave: (String value) {
+                          houseData.livingSpace = int.parse(value);
+                        }),
+                    FormFieldNumber(
+                        label: 'Antal rum',
+                        onSave: (String value) {
+                          houseData.rooms = double.parse(value);
+                        },
+                        isInteger: false),
+                    FormFieldNumber(
+                        label: 'Byggnadsår',
+                        onSave: (String value) {
+                          houseData.built = int.parse(value);
+                        }),
+                    FormFieldNumber(
+                        label: 'Pris',
+                        onSave: (String value) {
+                          houseData.price = int.parse(value);
+                        }),
+                    FormFieldNumber(
+                        label: 'Driftkostnad',
+                        onSave: (String value) {
+                          houseData.operationCost = int.parse(value);
+                        }),
+                    FormFieldText(
+                        label: 'Fastighetsbeteckning',
+                        onSave: (String value) {
+                          houseData.cadastral = value;
+                        }),
+                    FormFieldText(
+                        label: 'Byggnadstyp',
+                        onSave: (String value) {
+                          houseData.structure = value;
+                        }),
+                    FormFieldNumber(
+                        label: 'Tomtarea',
+                        onSave: (String value) {
+                          houseData.plotSize = int.parse(value);
+                        }),
+                    FormFieldText(
+                        label: 'Grund',
+                        onSave: (String value) {
+                          houseData.ground = value;
+                        }),
                     DropdownButton<String>(
                       items: createDropDownMenuItems(brokers),
                       onChanged: (String value) {
@@ -289,16 +181,14 @@ class _AddHouseState extends State<AddHouse> {
 
   List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
     List<DropdownMenuItem<String>> menuItems = [];
-    brokers.brokers.forEach((key,broker) => {
-      menuItems.add(DropdownMenuItem<String>(
-        child: Text(broker.name),
-        value: '${broker.id}',
-      ))
-    });
+    brokers.brokers.forEach((key, broker) => {
+          menuItems.add(DropdownMenuItem<String>(
+            child: Text(broker.name),
+            value: '${broker.id}',
+          ))
+        });
     print('End of createDropDownMenyItems length = ${menuItems.length}');
-    menuItems.forEach((item) => {
-      print('${item.value} : ${item.child}')
-    });
+    menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
     return menuItems;
   }
 
@@ -314,4 +204,3 @@ class _AddHouseState extends State<AddHouse> {
     }
   }
 }
-

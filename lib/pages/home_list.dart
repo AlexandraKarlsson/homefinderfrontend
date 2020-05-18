@@ -100,7 +100,7 @@ class _HomeListState extends State<HomeList> {
     }
   }
 
-  Future<Map<String, dynamic>> fetchImage() async {
+  Future<void> fetchImage() async {
     var url = 'http://10.0.2.2:8000/homes/image';
     final imageData = await fetchData(url);
     setImage(imageData);

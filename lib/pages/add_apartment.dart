@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'dart:convert' as convert;
@@ -8,6 +7,9 @@ import 'package:http/http.dart' as http;
 import '../data/apartment_data.dart';
 import './add_images.dart';
 import '../data/brokers.dart';
+
+import '../widgets/form_field_text.dart';
+import '../widgets/form_field_number.dart';
 
 const navigationStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
@@ -91,149 +93,52 @@ class _AddApartmentState extends State<AddApartment> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Adress',
-                      ),
-                      onSaved: (String value) {
-                        print('Address onSaved() running...');
-                        apartmentData.address = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i adressen'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Beskrivning',
-                      ),
-                      maxLines: 4,
-                      onSaved: (String value) {
-                        apartmentData.description = value;
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i en beskrivning'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Boarea',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        apartmentData.livingSpace = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i boarea'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Antal rum',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        //WhitelistingTextInputFormatter(RegExp('^(-?)(0|([1-9][0-9]*))(\\.[0-9]+)?\$')),
-                      ],
-                      onSaved: (String value) {
-                        apartmentData.rooms = double.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i antal rum'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Byggnadsår',
-                      ),
-                      onSaved: (String value) {
-                        apartmentData.built = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i byggnadsåret'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Pris',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        apartmentData.price = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i pris'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Driftkostnad',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        apartmentData.operationCost = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i driftkostnaden'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Lägenhetsnummer',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        apartmentData.apartmentNumber = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i lägenhetsnummret'
-                            : null;
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Hyra',
-                      ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        WhitelistingTextInputFormatter.digitsOnly,
-                      ],
-                      onSaved: (String value) {
-                        apartmentData.charge = int.parse(value);
-                      },
-                      validator: (String value) {
-                        return value.isEmpty
-                            ? 'Var vänlig och fyll i hyran'
-                            : null;
-                      },
-                    ),
+                    FormFieldText(
+                        label: 'Adress',
+                        onSave: (String value) {
+                          apartmentData.address = value;
+                        }),
+                    FormFieldText(
+                        label: 'Beskrivning',
+                        onSave: (String value) {
+                          apartmentData.description = value;
+                        }, maxLines: 4),
+                    FormFieldNumber(
+                        label: 'Boarea',
+                        onSave: (String value) {
+                          apartmentData.livingSpace = int.parse(value);
+                        }),
+                    FormFieldNumber(
+                        label: 'Antal rum',
+                        onSave: (String value) {
+                          apartmentData.rooms = double.parse(value);
+                        },
+                        isInteger: false),
+                    FormFieldNumber(
+                        label: 'Byggnadsår',
+                        onSave: (String value) {
+                          apartmentData.built = int.parse(value);
+                        }),
+                    FormFieldNumber(
+                        label: 'Pris',
+                        onSave: (String value) {
+                          apartmentData.price = int.parse(value);
+                        }),
+                    FormFieldNumber(
+                        label: 'Driftkostnad',
+                        onSave: (String value) {
+                          apartmentData.operationCost = int.parse(value);
+                        }),
+                    FormFieldNumber(
+                        label: 'Lägenhetsnummer',
+                        onSave: (String value) {
+                          apartmentData.apartmentNumber = int.parse(value);
+                        }),
+                    FormFieldNumber(
+                        label: 'Hyra',
+                        onSave: (String value) {
+                          apartmentData.charge = int.parse(value);
+                        }),
                     DropdownButton<String>(
                       items: createDropDownMenuItems(brokers),
                       onChanged: (String value) {
