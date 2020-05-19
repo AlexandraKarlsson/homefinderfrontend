@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -25,7 +24,7 @@ class _AddImagesState extends State<AddImages> {
   @override
   Widget build(BuildContext context) {
     _homeId = ModalRoute.of(context).settings.arguments;
-    print('_homeId = $_homeId');
+    //print('_homeId = $_homeId');
 
     return Scaffold(
       appBar: AppBar(title: Text('Lägg till bilder')),
@@ -49,10 +48,7 @@ class _AddImagesState extends State<AddImages> {
               icon: Icon(Icons.check),
               onPressed: () {
                 _imageFiles.forEach((imageInfo) {
-                  print('Uploading image');
                   _uploadImage(imageInfo);
-                  print(
-                      'Inserting imagename in database with foreign key =homeid');
                   var imageData = {
                     "imagename": imageInfo.name,
                     "homeid": _homeId
@@ -69,13 +65,11 @@ class _AddImagesState extends State<AddImages> {
   }
 
   void _addImage(BuildContext context) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
     dynamic _imageFile = await Navigator.pushNamed(context, AddImage.PATH);
     String extention = _imageFile.path.split(".").last;
     String imageName = 'house-${_homeId}_${_imageFiles.length + 4}.$extention';
     ImageData image = ImageData(_imageFile, imageName);
-    print('imageFile = ${image.file}, imageName = ${image.name}');
+    // print('imageFile = ${image.file}, imageName = ${image.name}');
     _imageFiles.add(image);
   }
 
@@ -86,9 +80,8 @@ class _AddImagesState extends State<AddImages> {
     };
 
     var newImageJson = convert.jsonEncode(image);
-    print('newImageJson = $newImageJson');
+    //print('newImageJson = $newImageJson');
 
-    // Await the http get response, then decode the json-formatted response.
     final response = await http.post(
       url,
       headers: headers,

@@ -30,15 +30,13 @@ class Home {
   static String formatCurrency(int price, String unit) {
     double priceD = price.toDouble();
     FlutterMoneyFormatter fmf = FlutterMoneyFormatter(
-        amount: priceD,
-        settings: MoneyFormatterSettings(
-          symbol: unit,
-          thousandSeparator: ' ',
-          //decimalSeparator: ',',
-          //symbolAndNumberSeparator: ' ',
-          fractionDigits: 0,
-          //compactFormatType: CompactFormatType.sort
-        ));
+      amount: priceD,
+      settings: MoneyFormatterSettings(
+        symbol: unit,
+        thousandSeparator: ' ',
+        fractionDigits: 0,
+      ),
+    );
     return fmf.output.symbolOnRight;
   }
 }

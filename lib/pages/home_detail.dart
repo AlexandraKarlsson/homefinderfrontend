@@ -50,7 +50,6 @@ class _HomeDetailState extends State<HomeDetail> {
     print('homeid = ${widget.home.id}');
     var url = 'http://10.0.2.2:8000/homes/${widget.home.id}/images';
 
-    // Await the http get response, then decode the json-formatted response.
     var response = await http.get(url);
     if (response.statusCode == 200) {
       // print('response ${response.body}');

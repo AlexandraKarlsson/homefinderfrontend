@@ -46,20 +46,18 @@ class _AddApartmentState extends State<AddApartment> {
     };
 
     var newApartmentDataJson = convert.jsonEncode(newApartmentData);
-    print('newApartmentDataJson = $newApartmentDataJson');
+    // print('newApartmentDataJson = $newApartmentDataJson');
 
-    // Await the http get response, then decode the json-formatted response.
     final response = await http.post(
       url,
       headers: headers,
       body: newApartmentDataJson,
     );
     if (response.statusCode == 201) {
-      print('response ${response.body}');
+      // print('response ${response.body}');
       var responseData =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
       homeId = responseData['homeId'];
-      print('HomeId = $homeId');
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -73,15 +71,12 @@ class _AddApartmentState extends State<AddApartment> {
             value: '${broker.id}',
           ))
         });
-    // print('End of createDropDownMenyItems length = ${menuItems.length}');
     // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
     return menuItems;
   }
 
   Widget buildApartmentForm(BuildContext context) {
     Brokers brokers = Provider.of<Brokers>(context, listen: false);
-    // print('Brokers.length = ${brokers.brokers.length}');
-    // print('Brokers id 1 = ${brokers.brokers[1].name}');
     return Container(
       padding: EdgeInsets.all(8),
       color: Colors.blue[50],
@@ -155,10 +150,8 @@ class _AddApartmentState extends State<AddApartment> {
             ),
             RaisedButton(
               onPressed: () {
-                // Validate returns true if the form is valid, otherwise false.
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
-                  print('Apartment address = ${apartmentData.address}');
                   setState(() {
                     _isSaving = true;
                   });

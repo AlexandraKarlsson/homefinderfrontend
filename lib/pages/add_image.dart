@@ -16,9 +16,9 @@ class _AddImageState extends State<AddImage> {
   File _imageFile;
 
   Future<void> _pickImage(ImageSource source) async {
-    print('Inside _pickImage()...');
+    // print('Inside _pickImage()...');
     File selected = await ImagePicker.pickImage(source: source);
-    print('selected = $selected');
+    // print('selected = $selected');
     setState(() {
       _imageFile = selected;
     });
@@ -30,11 +30,8 @@ class _AddImageState extends State<AddImage> {
       sourcePath: _imageFile.path,
       maxWidth: 512,
       maxHeight: 512,
-      // toolbarColor: Colors.purple,
-      // toolbarWidgetColor: Colors.white,
-      // toolbarTitle: 'Crop It'
     );
-    print('cropped = $cropped');
+    // print('cropped = $cropped');
 
     setState(() {
       _imageFile = cropped ?? _imageFile;
@@ -47,7 +44,7 @@ class _AddImageState extends State<AddImage> {
 
   @override
   Widget build(BuildContext context) {
-    print('_imageFile = $_imageFile');
+    // print('_imageFile = $_imageFile');
 
     return Scaffold(
       appBar: AppBar(title: Text('Lägg till bilder')),

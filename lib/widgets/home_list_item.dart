@@ -15,7 +15,6 @@ class HomeListItem extends StatelessWidget {
         elevation: 5,
         child: InkWell(
           onTap: () {
-            // Navigator.pushNamed(context, HomeDetail.HOME_PATH);
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -25,9 +24,6 @@ class HomeListItem extends StatelessWidget {
             leading: Image.network(
               'http://10.0.2.2:8010/images/${home.image}',
             ),
-            /* Image.asset(
-              'assets/images/${home.image}',
-            ),*/
             title: Text(
               home.address,
               style: TextStyle(fontSize: 14),

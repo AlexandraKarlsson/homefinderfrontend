@@ -48,29 +48,38 @@ class _AddHouseState extends State<AddHouse> {
     };
 
     var newHouseDataJson = convert.jsonEncode(newHouseData);
-    print('NewHouseDataJson = $newHouseDataJson');
+    // print('NewHouseDataJson = $newHouseDataJson');
 
-    // Await the http get response, then decode the json-formatted response.
     final response = await http.post(
       url,
       headers: headers,
       body: newHouseDataJson,
     );
     if (response.statusCode == 201) {
-      print('response ${response.body}');
+      // print('response ${response.body}');
       var responseData =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
       homeId = responseData['homeId'];
-      print('HomeId = $homeId');
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
   }
 
+  
+  List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
+    List<DropdownMenuItem<String>> menuItems = [];
+    brokers.brokers.forEach((key, broker) => {
+          menuItems.add(DropdownMenuItem<String>(
+            child: Text(broker.name),
+            value: '${broker.id}',
+          ))
+        });
+    // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
+    return menuItems;
+  }
+
   Widget buildHouseForm(BuildContext context) {
     Brokers brokers = Provider.of<Brokers>(context, listen: false);
-    print('Brokers.length = ${brokers.brokers.length}');
-    print('Brokers id 1 = ${brokers.brokers[1].name}');
     return Container(
       padding: EdgeInsets.all(8),
       color: Colors.blue[50],
@@ -154,10 +163,8 @@ class _AddHouseState extends State<AddHouse> {
             ),
             RaisedButton(
               onPressed: () {
-                // Validate returns true if the form is valid, otherwise false.
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
-                  print('House address = ${houseData.address}');
                   setState(() {
                     _isSaving = true;
                   });
@@ -176,19 +183,6 @@ class _AddHouseState extends State<AddHouse> {
         ),
       ),
     );
-  }
-
-  List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
-    List<DropdownMenuItem<String>> menuItems = [];
-    brokers.brokers.forEach((key, broker) => {
-          menuItems.add(DropdownMenuItem<String>(
-            child: Text(broker.name),
-            value: '${broker.id}',
-          ))
-        });
-    print('End of createDropDownMenyItems length = ${menuItems.length}');
-    menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
-    return menuItems;
   }
 
   @override

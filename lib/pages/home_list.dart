@@ -33,7 +33,6 @@ class _HomeListState extends State<HomeList> {
   @override
   void initState() {
     super.initState();
-    print('initState running...');
 
     if (_isInit) {
       setState(() {
