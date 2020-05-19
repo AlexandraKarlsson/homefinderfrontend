@@ -15,9 +15,6 @@ import '../data/house.dart';
 import '../data/home.dart';
 import '../data/settings.dart';
 
-// Apartments apartments = Apartments();
-// Houses houses = Houses();
-
 class HomeList extends StatefulWidget {
   static const PATH = 'list';
 
@@ -27,8 +24,8 @@ class HomeList extends StatefulWidget {
 
 class _HomeListState extends State<HomeList> {
   Brokers brokers;
-  Apartments apartments; //  = Apartments();
-  Houses houses; //  = Houses();
+  Apartments apartments;
+  Houses houses;
 
   var _isInit = true;
   var _isLoading = false;
@@ -52,7 +49,6 @@ class _HomeListState extends State<HomeList> {
   }
 
   Future<void> fetch() async {
-    //if (apartments == null) {
     brokers = Brokers();
     apartments = Apartments();
     houses = Houses();
@@ -60,13 +56,12 @@ class _HomeListState extends State<HomeList> {
     await fetchApartments();
     await fetchHouses();
     await fetchImage();
-    //}
   }
 
   Future<Map<String, dynamic>> fetchData(String url) async {
     var data;
     var response = await http.get(url);
-    print('response ${response.body}');
+    //print('response ${response.body}');
     if (response.statusCode == 200) {
       data = convert.json.decode(response.body) as Map<String, dynamic>;
     } else {
@@ -156,10 +151,7 @@ class _HomeListState extends State<HomeList> {
                 child: ListView.builder(
                   itemCount: homeList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return HomeListItem(
-                        home: homeList[index],
-                        // TODO: remove broker parameter
-                        broker: brokers.brokers[homeList[index].brokerId]);
+                    return HomeListItem(home: homeList[index]);
                   },
                 ),
               ),

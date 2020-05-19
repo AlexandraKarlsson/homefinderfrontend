@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_read_more_text/flutter_read_more_text.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:async';
 import 'dart:convert' as convert;
@@ -9,15 +10,16 @@ import '../data/apartment.dart';
 import '../data/house.dart';
 import '../data/home.dart';
 import '../data/broker.dart';
+import '../data/brokers.dart';
 import '../widgets/image_viewer.dart';
 import '../widgets/home_item.dart';
+
 
 class HomeDetail extends StatefulWidget {
   static const HOME_PATH = 'home';
   final Home home;
-  final Broker broker;
 
-  HomeDetail(this.home, this.broker);
+  HomeDetail(this.home);
 
   @override
   _HomeDetailState createState() => _HomeDetailState();
@@ -102,7 +104,10 @@ class _HomeDetailState extends State<HomeDetail> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+
+    Brokers brokers = Provider.of<Brokers>(context, listen: false); 
+    Broker broker = brokers.brokers[widget.home.brokerId];   
     String appBarText;
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
@@ -172,13 +177,13 @@ class _HomeDetailState extends State<HomeDetail> {
                 child: ListTile(
                   leading: Icon(Icons.account_circle),
                   title: Text(
-                    widget.broker.name,
+                    broker.name,
                     style: TextStyle(fontSize: 14),
                   ),
                   subtitle:
-                      Text(widget.broker.email, style: TextStyle(fontSize: 12)),
+                      Text(broker.email, style: TextStyle(fontSize: 12)),
                   trailing:
-                      Text(widget.broker.phone, style: TextStyle(fontSize: 12)),
+                      Text(broker.phone, style: TextStyle(fontSize: 12)),
                 ),
               ),
             ],

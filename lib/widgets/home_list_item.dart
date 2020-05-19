@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+
 import '../pages/home_detail.dart';
 import '../data/home.dart';
-import '../data/broker.dart';
 
 class HomeListItem extends StatelessWidget {
   final Home home;
-  final Broker broker;
 
-  const HomeListItem({@required this.home,@required this.broker});
+  const HomeListItem({@required this.home});
 
   @override
   Widget build(BuildContext context) {
-    // print(home.image);
-
     return Container(
       child: Card(
         elevation: 5,
@@ -22,7 +19,7 @@ class HomeListItem extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => HomeDetail(home, broker)));
+                    builder: (BuildContext context) => HomeDetail(home)));
           },
           child: ListTile(
             leading: Image.network(
