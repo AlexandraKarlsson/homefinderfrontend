@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 import '../data/house_data.dart';
 import './add_images.dart';
-import '../data/brokers.dart';
 
 import '../widgets/form_field_text.dart';
 import '../widgets/form_field_number.dart';
+import '../widgets/form_field_dropdown.dart';
 
 const navigationStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
@@ -65,21 +64,7 @@ class _AddHouseState extends State<AddHouse> {
     }
   }
 
-  
-  List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
-    List<DropdownMenuItem<String>> menuItems = [];
-    brokers.brokers.forEach((key, broker) => {
-          menuItems.add(DropdownMenuItem<String>(
-            child: Text(broker.name),
-            value: '${broker.id}',
-          ))
-        });
-    // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
-    return menuItems;
-  }
-
   Widget buildHouseForm(BuildContext context) {
-    Brokers brokers = Provider.of<Brokers>(context, listen: false);
     return Container(
       padding: EdgeInsets.all(8),
       color: Colors.blue[50],
@@ -147,16 +132,13 @@ class _AddHouseState extends State<AddHouse> {
                         onSave: (String value) {
                           houseData.ground = value;
                         }),
-                    DropdownButton<String>(
-                      items: createDropDownMenuItems(brokers),
-                      onChanged: (String value) {
-                        setState(() {
-                          houseData.brokerId = int.parse(value);
-                        });
-                      },
-                      hint: Text('Välj mäklare'),
-                      value: houseData.brokerId.toString(),
-                    ),
+                    FormFieldDropdown((String value) {
+                      setState(() {
+                        houseData.brokerId = int.parse(value);
+                      });
+                    }, () {
+                      return houseData.brokerId.toString();
+                    }),
                   ],
                 ),
               ),

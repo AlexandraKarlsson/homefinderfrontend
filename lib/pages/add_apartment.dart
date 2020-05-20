@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 import '../data/apartment_data.dart';
 import './add_images.dart';
-import '../data/brokers.dart';
 
 import '../widgets/form_field_text.dart';
 import '../widgets/form_field_number.dart';
+import '../widgets/form_field_dropdown.dart';
 
 const navigationStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
@@ -63,7 +62,7 @@ class _AddApartmentState extends State<AddApartment> {
     }
   }
 
-  List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
+  /* List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
     List<DropdownMenuItem<String>> menuItems = [];
     brokers.brokers.forEach((key, broker) => {
           menuItems.add(DropdownMenuItem<String>(
@@ -73,10 +72,10 @@ class _AddApartmentState extends State<AddApartment> {
         });
     // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
     return menuItems;
-  }
+  } */
 
   Widget buildApartmentForm(BuildContext context) {
-    Brokers brokers = Provider.of<Brokers>(context, listen: false);
+    // Brokers brokers = Provider.of<Brokers>(context, listen: false);
     return Container(
       padding: EdgeInsets.all(8),
       color: Colors.blue[50],
@@ -97,7 +96,8 @@ class _AddApartmentState extends State<AddApartment> {
                         label: 'Beskrivning',
                         onSave: (String value) {
                           apartmentData.description = value;
-                        }, maxLines: 4),
+                        },
+                        maxLines: 4),
                     FormFieldNumber(
                         label: 'Boarea',
                         onSave: (String value) {
@@ -134,7 +134,14 @@ class _AddApartmentState extends State<AddApartment> {
                         onSave: (String value) {
                           apartmentData.charge = int.parse(value);
                         }),
-                    DropdownButton<String>(
+                    FormFieldDropdown((String value) {
+                      setState(() {
+                        apartmentData.brokerId = int.parse(value);
+                      });
+                    }, () {
+                      return apartmentData.brokerId.toString();
+                    }),
+                    /* DropdownButton<String>(
                       items: createDropDownMenuItems(brokers),
                       onChanged: (String value) {
                         setState(() {
@@ -143,7 +150,7 @@ class _AddApartmentState extends State<AddApartment> {
                       },
                       hint: Text('Välj mäklare'),
                       value: apartmentData.brokerId.toString(),
-                    ),
+                    ), */
                   ],
                 ),
               ),
