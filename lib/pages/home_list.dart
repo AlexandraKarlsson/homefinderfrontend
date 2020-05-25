@@ -33,7 +33,6 @@ class _HomeListState extends State<HomeList> {
   @override
   void initState() {
     super.initState();
-
     if (_isInit) {
       setState(() {
         _isLoading = true;
@@ -47,7 +46,19 @@ class _HomeListState extends State<HomeList> {
     });
   }
 
+  void updateData() {
+    setState(() {
+      _isLoading = true;
+    });
+    fetch().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
   Future<void> fetch() async {
+    // print('Inside fetch ...');
     brokers = Brokers();
     apartments = Apartments();
     houses = Houses();
@@ -141,6 +152,15 @@ class _HomeListState extends State<HomeList> {
       return Scaffold(
         appBar: AppBar(
           title: Text('Hitta hemmet'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              tooltip: 'Uppdatera sidan',
+              onPressed: () {
+                updateData();
+              },
+            ),
+          ],
         ),
         drawer: MainDrawer(settings.search),
         body: Column(
