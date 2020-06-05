@@ -6,9 +6,12 @@ import 'pages/add_apartment.dart';
 import 'pages/add_images.dart';
 import 'pages/add_image.dart';
 import 'pages/home_list.dart';
+import 'pages/login.dart';
+import 'pages/add_user.dart';
 
 import 'data/settings.dart';
 import 'data/brokers.dart';
+import 'data/user.dart';
 
 import 'test.dart';
 
@@ -28,6 +31,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<Settings>(create: (_) => Settings()),
+        ChangeNotifierProvider<User>(create: (_) => User()),
         Provider<Brokers>(create: (_) => Brokers()),
       ],
       child: MaterialApp(
@@ -43,6 +47,8 @@ class MyApp extends StatelessWidget {
           AddApartment.PATH: (context) => AddApartment(),
           AddImages.PATH: (context) => AddImages(),
           AddImage.PATH: (context) => AddImage(),
+          AddUser.PATH: (context) => AddUser(),
+          Login.PATH: (context) => Login(),
           // HomeDetail.HOME_PATH: (context) => HomeDetail(),
           Test.TEST_PATH: (context) => Test(),
         },

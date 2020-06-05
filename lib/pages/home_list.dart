@@ -14,6 +14,7 @@ import '../data/houses.dart';
 import '../data/house.dart';
 import '../data/home.dart';
 import '../data/settings.dart';
+import 'add_user.dart';
 
 class HomeList extends StatefulWidget {
   static const PATH = 'list';
@@ -158,6 +159,17 @@ class _HomeListState extends State<HomeList> {
               tooltip: 'Uppdatera sidan',
               onPressed: () {
                 updateData();
+              },
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.account_circle,
+                color: Colors.lightGreen,
+                size: 30,
+              ),
+              tooltip: 'Logga in',
+              onPressed: () {
+                Navigator.pushNamed(context, AddUser.PATH);
               },
             ),
           ],
