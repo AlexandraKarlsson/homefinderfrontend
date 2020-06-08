@@ -13,8 +13,9 @@ import '../data/apartment.dart';
 import '../data/houses.dart';
 import '../data/house.dart';
 import '../data/home.dart';
+import '../data/user.dart';
 import '../data/settings.dart';
-import 'add_user.dart';
+import 'login.dart';
 
 class HomeList extends StatefulWidget {
   static const PATH = 'list';
@@ -124,11 +125,25 @@ class _HomeListState extends State<HomeList> {
     houses.add(houseData);
   }
 
+  Future<void> _logout(User user) async {
+    // TODO: call backend to logout user
+    String url = 'http://10.0.2.2:8000/user/me/token';
+    var headers = <String, String>{'x-auth': user.token};
+    final response = await http.delete(url, headers: headers);
+    print('response status code ${response.statusCode}, body ${response.body}');
+    if (response.statusCode == 200) {
+      user.clear();
+    } else {
+      print('Logout failed!');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
     } else {
+      User user = Provider.of<User>(context);
       Settings settings = Provider.of<Settings>(context);
       Brokers brokersContext = Provider.of<Brokers>(context);
       brokers.brokers
@@ -161,17 +176,29 @@ class _HomeListState extends State<HomeList> {
                 updateData();
               },
             ),
-            IconButton(
-              icon: const Icon(
-                Icons.account_circle,
-                color: Colors.lightGreen,
-                size: 30,
-              ),
-              tooltip: 'Logga in',
-              onPressed: () {
-                Navigator.pushNamed(context, AddUser.PATH);
-              },
-            ),
+            user.token == null
+                ? IconButton(
+                    icon: const Icon(
+                      Icons.account_circle,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    tooltip: 'Logga in',
+                    onPressed: () {
+                      Navigator.pushNamed(context, Login.PATH);
+                    },
+                  )
+                : IconButton(
+                    icon: const Icon(
+                      Icons.account_circle,
+                      color: Colors.lightGreen,
+                      size: 30,
+                    ),
+                    tooltip: 'Logga ut',
+                    onPressed: () {
+                      _logout(user);
+                    },
+                  ),
           ],
         ),
         drawer: MainDrawer(settings.search),

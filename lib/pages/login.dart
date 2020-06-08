@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../widgets/form_field_text.dart';
 import '../data/user.dart';
+import 'add_user.dart';
 
 class LoginData {
   String email;
@@ -50,11 +51,13 @@ class _LoginState extends State<Login> {
       String token = response.headers['x-auth'];
       User loggedInUser = Provider.of<User>(context);
 
-      responseData['rows'].forEach((user) {
-        String email = user['email'];
-        String username = user['username'];
-        loggedInUser.set(username, email, token);
-      });
+      String email = responseData['user']['email'];
+      String username = responseData['user']['username'];
+      print('email, $email');
+      print('username, $username');
+      print('token, $token');
+
+      loggedInUser.set(username, email, token);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -62,51 +65,62 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      color: Colors.blue[50],
-      child: Form(
-        key: this._formKey,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    FormFieldText(
-                        label: 'Email',
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Logga in'),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(8),
+        color: Colors.blue[50],
+        child: Form(
+          key: this._formKey,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      FormFieldText(
+                          label: 'Email',
+                          onSave: (String value) {
+                            loginData.email = value;
+                          }),
+                      FormFieldText(
+                        label: 'Lösenord',
                         onSave: (String value) {
-                          loginData.email = value;
-                        }),
-                    FormFieldText(
-                      label: 'Lösenord',
-                      onSave: (String value) {
-                        loginData.password = value;
-                      },
-                      obscureText: true,
-                    ),
-                  ],
+                          loginData.password = value;
+                        },
+                        obscureText: true,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            RaisedButton(
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  setState(() {
-                    _isSaving = true;
-                  });
-                  saveData(context).then((_) {
+              RaisedButton(
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
                     setState(() {
-                      _isSaving = false;
+                      _isSaving = true;
                     });
-                    Navigator.pop(context);
-                  });
-                }
-              },
-              child: Text('Logga in'),
-            ),
-          ],
+                    saveData(context).then((_) {
+                      setState(() {
+                        _isSaving = false;
+                      });
+                      Navigator.pop(context);
+                    });
+                  }
+                },
+                child: Text('Logga in'),
+              ),
+              Text('Inget konto?'),
+              RaisedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, AddUser.PATH);
+                  },
+                  child: Text('Skapa konto')),
+            ],
+          ),
         ),
       ),
     );

@@ -47,10 +47,31 @@ class _AddUserState extends State<AddUser> {
       var responseData =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
       print('responseData $responseData');
+      //_showDialog("Meddelande", "Användaren skapad");
     } else {
       print('Request failed with status: ${response.statusCode}.');
+      //_showDialog("Felmeddelande", "OOPS! Något gick fel, var vänlig försök igen!");
     }
   }
+
+  _showDialog(String title, String message) {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: new Text(title),
+              content:
+                  new Text(message),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +133,7 @@ class _AddUserState extends State<AddUser> {
                         Navigator.pop(context);
                       });
                     } else {
-                      // TODO: add dialog
-                      _showDialog();
+                      _showDialog("Felmeddelande","Lösenorden matchar inte, var vänlig försök igen!");
                     }
                   }
                 },
@@ -124,23 +144,7 @@ class _AddUserState extends State<AddUser> {
         ),
       ),
     );
+
   }
 
-  _showDialog() {
-    showDialog(
-        context: context,
-        builder: (_) => new AlertDialog(
-              title: new Text("Felmeddelande"),
-              content:
-                  new Text("Lösenorden matchar inte, var vänlig försök igen!"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
-  }
 }

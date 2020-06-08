@@ -22,4 +22,11 @@ class User extends ChangeNotifier {
     _token = token;
     notifyListeners();
   } 
+
+  void clear() {
+    _username = null;
+    _email = null;
+    _token = null;
+    notifyListeners();
+  }
 }
