@@ -6,6 +6,7 @@ import 'add_house.dart';
 import 'add_apartment.dart';
 
 import '../data/settings.dart';
+import '../data/user.dart';
 
 class MainDrawer extends StatefulWidget {
   final String search;
@@ -27,6 +28,7 @@ class _MainDrawerState extends State<MainDrawer> {
   @override
   Widget build(BuildContext context) {
     Settings settings = Provider.of<Settings>(context);
+    User user = Provider.of<User>(context);
 
     return Container(
       height: double.infinity,
@@ -101,6 +103,7 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
             ],
           ),
+          user.token != null ?
           Column(
             children: <Widget>[
               Text('Lägg ut hem till försäljning:'),
@@ -128,7 +131,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 ],
               ),
             ],
-          ),
+          ) : Container(),
         ],
       ),
     );
