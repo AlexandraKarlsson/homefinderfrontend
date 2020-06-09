@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
 import '../data/apartment_data.dart';
+import '../data/user.dart';
 import './add_images.dart';
 
 import '../widgets/form_field_text.dart';
@@ -26,10 +28,11 @@ class _AddApartmentState extends State<AddApartment> {
 
   bool _isSaving = false;
 
-  Future<void> saveData() async {
+  Future<void> saveData(User user) async {
     var url = 'http://10.0.2.2:8000/apartment';
     var headers = <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8'
+      'Content-Type': 'application/json; charset=UTF-8',
+      'x-auth': user.token
     };
     var newApartmentData = {
       'address': apartmentData.address,
@@ -76,6 +79,7 @@ class _AddApartmentState extends State<AddApartment> {
 
   Widget buildApartmentForm(BuildContext context) {
     // Brokers brokers = Provider.of<Brokers>(context, listen: false);
+    User user = Provider.of<User>(context);
     return Container(
       padding: EdgeInsets.all(8),
       color: Colors.blue[50],
@@ -141,16 +145,6 @@ class _AddApartmentState extends State<AddApartment> {
                     }, () {
                       return apartmentData.brokerId.toString();
                     }),
-                    /* DropdownButton<String>(
-                      items: createDropDownMenuItems(brokers),
-                      onChanged: (String value) {
-                        setState(() {
-                          apartmentData.brokerId = int.parse(value);
-                        });
-                      },
-                      hint: Text('Välj mäklare'),
-                      value: apartmentData.brokerId.toString(),
-                    ), */
                   ],
                 ),
               ),
@@ -162,7 +156,7 @@ class _AddApartmentState extends State<AddApartment> {
                   setState(() {
                     _isSaving = true;
                   });
-                  saveData().then((_) {
+                  saveData(user).then((_) {
                     setState(() {
                       _isSaving = false;
                     });
