@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -8,6 +9,7 @@ import 'add_image.dart';
 import 'home_list.dart';
 import '../widgets/add_image_item.dart';
 import '../data/image_data.dart';
+import '../data/user.dart';
 
 
 class AddImages extends StatefulWidget {
@@ -25,6 +27,7 @@ class _AddImagesState extends State<AddImages> {
   Widget build(BuildContext context) {
     _homeId = ModalRoute.of(context).settings.arguments;
     //print('_homeId = $_homeId');
+    User user = Provider.of<User>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('Lägg till bilder')),
@@ -53,7 +56,7 @@ class _AddImagesState extends State<AddImages> {
                     "imagename": imageInfo.name,
                     "homeid": _homeId
                   };
-                  _saveImage(imageData);
+                  _saveImage(imageData, user);
                 });
                 Navigator.pushNamed(context, HomeList.PATH);
               },
@@ -73,10 +76,11 @@ class _AddImagesState extends State<AddImages> {
     _imageFiles.add(image);
   }
 
-  Future<void> _saveImage(dynamic image) async {
+  Future<void> _saveImage(dynamic image, User user) async {
     var url = 'http://10.0.2.2:8000/image';
     var headers = <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8'
+      'Content-Type': 'application/json; charset=UTF-8',
+      'x-auth': user.token
     };
 
     var newImageJson = convert.jsonEncode(image);
