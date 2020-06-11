@@ -11,7 +11,6 @@ import '../widgets/add_image_item.dart';
 import '../data/image_data.dart';
 import '../data/user.dart';
 
-
 class AddImages extends StatefulWidget {
   static const PATH = 'addImages';
 
@@ -51,7 +50,7 @@ class _AddImagesState extends State<AddImages> {
               icon: Icon(Icons.check),
               onPressed: () {
                 _imageFiles.forEach((imageInfo) {
-                  _uploadImage(imageInfo);
+                  _uploadImage(imageInfo, user);
                   var imageData = {
                     "imagename": imageInfo.name,
                     "homeid": _homeId
@@ -98,18 +97,22 @@ class _AddImagesState extends State<AddImages> {
     }
   }
 
- Future<void> _uploadImage(ImageData image) async {
-   final String url = 'http://10.0.2.2:8010/image';
-   String base64Image = convert.base64Encode(image.file.readAsBytesSync());
+  Future<void> _uploadImage(ImageData image, User user) async {
+    final String url = 'http://10.0.2.2:8010/image';
+    String base64Image = convert.base64Encode(image.file.readAsBytesSync());
+    var headers = <String, String>{'x-auth': user.token};
 
-   http.post(url, body: {
-     "image": base64Image,
-     "name": image.name,
-   }).then((response) {
-     print(response.statusCode);
-   }).catchError((error) {
-     print(error);
-   });
+    http.post(
+      url,
+      headers: headers,
+      body: {
+        "image": base64Image,
+        "name": image.name,
+      },
+    ).then((response) {
+      print(response.statusCode);
+    }).catchError((error) {
+      print(error);
+    });
   }
-
 }
