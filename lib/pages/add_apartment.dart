@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../data/apartment_data.dart';
 import '../data/user.dart';
+import '../data/home_args.dart';
 import './add_images.dart';
 
 import '../widgets/form_field_text.dart';
@@ -13,6 +14,7 @@ import '../widgets/form_field_number.dart';
 import '../widgets/form_field_dropdown.dart';
 
 const navigationStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+
 
 class AddApartment extends StatefulWidget {
   static const PATH = 'addApartment';
@@ -161,7 +163,7 @@ class _AddApartmentState extends State<AddApartment> {
                       _isSaving = false;
                     });
                     Navigator.pushNamed(context, AddImages.PATH,
-                        arguments: homeId);
+                        arguments: HomeArgs(homeId, HomeType.apartment));
                   });
                 }
               },

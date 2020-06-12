@@ -10,6 +10,7 @@ import 'home_list.dart';
 import '../widgets/add_image_item.dart';
 import '../data/image_data.dart';
 import '../data/user.dart';
+import '../data/home_args.dart';
 
 class AddImages extends StatefulWidget {
   static const PATH = 'addImages';
@@ -19,12 +20,13 @@ class AddImages extends StatefulWidget {
 }
 
 class _AddImagesState extends State<AddImages> {
-  int _homeId;
+  HomeArgs homeArgs;
   List<ImageData> _imageFiles = List<ImageData>();
 
   @override
   Widget build(BuildContext context) {
-    _homeId = ModalRoute.of(context).settings.arguments;
+    homeArgs = ModalRoute.of(context).settings.arguments;
+
     //print('_homeId = $_homeId');
     User user = Provider.of<User>(context);
 
@@ -53,7 +55,7 @@ class _AddImagesState extends State<AddImages> {
                   _uploadImage(imageInfo, user);
                   var imageData = {
                     "imagename": imageInfo.name,
-                    "homeid": _homeId
+                    "homeid": homeArgs.homeId
                   };
                   _saveImage(imageData, user);
                 });
@@ -66,10 +68,11 @@ class _AddImagesState extends State<AddImages> {
     );
   }
 
-  void _addImage(BuildContext context) async {
+  void _addImage(BuildContext context,) async {
     dynamic _imageFile = await Navigator.pushNamed(context, AddImage.PATH);
     String extention = _imageFile.path.split(".").last;
-    String imageName = 'house-${_homeId}_${_imageFiles.length + 4}.$extention';
+    String namePrefix = homeArgs.homeType == HomeType.apartment ? 'apartment' : 'house';
+    String imageName = '$namePrefix-${homeArgs.homeId}_${_imageFiles.length + 4}.$extention';
     ImageData image = ImageData(_imageFile, imageName);
     // print('imageFile = ${image.file}, imageName = ${image.name}');
     _imageFiles.add(image);

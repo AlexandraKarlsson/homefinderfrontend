@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../data/house_data.dart';
 import '../data/user.dart';
+import '../data/home_args.dart';
 import './add_images.dart';
 
 import '../widgets/form_field_text.dart';
@@ -162,7 +163,7 @@ class _AddHouseState extends State<AddHouse> {
                       _isSaving = false;
                     });
                     Navigator.pushNamed(context, AddImages.PATH,
-                        arguments: homeId);
+                        arguments: HomeArgs(homeId, HomeType.house));
                   });
                 }
               },
