@@ -126,7 +126,6 @@ class _HomeListState extends State<HomeList> {
   }
 
   Future<void> _logout(User user) async {
-    // TODO: call backend to logout user
     String url = 'http://10.0.2.2:8000/user/me/token';
     var headers = <String, String>{'x-auth': user.token};
     final response = await http.delete(url, headers: headers);
@@ -176,29 +175,45 @@ class _HomeListState extends State<HomeList> {
                 updateData();
               },
             ),
-            user.token == null
-                ? IconButton(
-                    icon: const Icon(
-                      Icons.account_circle,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                    tooltip: 'Logga in',
-                    onPressed: () {
-                      Navigator.pushNamed(context, Login.PATH);
-                    },
-                  )
-                : IconButton(
-                    icon: const Icon(
-                      Icons.account_circle,
-                      color: Colors.lightGreen,
-                      size: 30,
-                    ),
-                    tooltip: 'Logga ut',
-                    onPressed: () {
-                      _logout(user);
-                    },
-                  ),
+            PopupMenuButton<int>(
+              itemBuilder: (context) => [
+                user.token == null
+                    ? PopupMenuItem(
+                        value: 1,
+                        child: Text("Logga in"),
+                      )
+                    : null,
+                user.token != null
+                    ? PopupMenuItem(
+                        value: 2,
+                        child: Text("Om mig"),
+                      )
+                    : null,
+                user.token != null
+                    ? PopupMenuItem(
+                        value: 3,
+                        child: Text("Logga ut"),
+                      )
+                    : null,
+              ],
+              icon: Icon(
+                Icons.account_circle,
+                color: user.token != null ? Colors.lightGreen : Colors.white,
+                size: 30,
+              ),
+              onSelected: (value) => {
+                print('Value = $value'),
+                if (value == 1)
+                  // navigera till login/signup sidan
+                  {Navigator.pushNamed(context, Login.PATH)}
+                else if (value == 2)
+                  {print('Om mig NOT IMPLEMENTED')}
+                else if (value == 3)
+                  {_logout(user)}
+                else
+                  {print('Unknown selection = $value')}
+              },
+            ),
           ],
         ),
         drawer: MainDrawer(settings.search),

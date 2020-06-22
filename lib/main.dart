@@ -8,6 +8,7 @@ import 'pages/add_image.dart';
 import 'pages/home_list.dart';
 import 'pages/login.dart';
 import 'pages/add_user.dart';
+import 'playground/popup.dart';
 
 import 'data/settings.dart';
 import 'data/brokers.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blueGrey,
         ),
         initialRoute: '/',
+        // initialRoute: PopUp.PATH,
         routes: {
           '/': (context) => HomeList(),
           HomeList.PATH: (context) => HomeList(),
@@ -51,6 +53,7 @@ class MyApp extends StatelessWidget {
           Login.PATH: (context) => Login(),
           // HomeDetail.HOME_PATH: (context) => HomeDetail(),
           Test.TEST_PATH: (context) => Test(),
+          PopUp.PATH: (context) => PopUp(),
         },
       ),
     );

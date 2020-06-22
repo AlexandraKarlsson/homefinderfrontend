@@ -115,6 +115,7 @@ class _AddImagesState extends State<AddImages> {
     ).then((response) {
       print(response.statusCode);
     }).catchError((error) {
+      print('Upload image failed');
       print(error);
     });
   }
