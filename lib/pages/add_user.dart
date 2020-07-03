@@ -59,8 +59,7 @@ class _AddUserState extends State<AddUser> {
         context: context,
         builder: (_) => new AlertDialog(
               title: new Text(title),
-              content:
-                  new Text(message),
+              content: new Text(message),
               actions: <Widget>[
                 FlatButton(
                   child: Text('OK'),
@@ -71,7 +70,6 @@ class _AddUserState extends State<AddUser> {
               ],
             ));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +84,13 @@ class _AddUserState extends State<AddUser> {
           key: this._formKey,
           child: Column(
             children: <Widget>[
+              Align(
+                alignment: Alignment.topRight,
+                child: Hero(
+                  tag: 'account',
+                  child: Icon(Icons.account_circle, size: 30),
+                ),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -133,7 +138,8 @@ class _AddUserState extends State<AddUser> {
                         Navigator.pop(context);
                       });
                     } else {
-                      _showDialog("Felmeddelande","Lösenorden matchar inte, var vänlig försök igen!");
+                      _showDialog("Felmeddelande",
+                          "Lösenorden matchar inte, var vänlig försök igen!");
                     }
                   }
                 },
@@ -144,7 +150,5 @@ class _AddUserState extends State<AddUser> {
         ),
       ),
     );
-
   }
-
 }

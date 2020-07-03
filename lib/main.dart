@@ -15,6 +15,7 @@ import 'data/brokers.dart';
 import 'data/user.dart';
 
 import 'test.dart';
+import 'playground/hero_animation_from.dart';
 
 /*
 To start the emulator:
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blueGrey,
         ),
         initialRoute: '/',
-        // initialRoute: PopUp.PATH,
+        // initialRoute: HeroAnimationFrom.PATH,
         routes: {
           '/': (context) => HomeList(),
           HomeList.PATH: (context) => HomeList(),
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
           // HomeDetail.HOME_PATH: (context) => HomeDetail(),
           Test.TEST_PATH: (context) => Test(),
           PopUp.PATH: (context) => PopUp(),
+          HeroAnimationFrom.PATH: (context) => HeroAnimationFrom(),
         },
       ),
     );

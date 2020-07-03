@@ -180,7 +180,16 @@ class _HomeListState extends State<HomeList> {
                 user.token == null
                     ? PopupMenuItem(
                         value: 1,
-                        child: Text("Logga in"),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.account_circle,
+                              size: 30,
+                              color: Colors.blue,
+                            ),
+                            Text("Logga in"),
+                          ],
+                        ),
                       )
                     : null,
                 user.token != null
@@ -196,16 +205,28 @@ class _HomeListState extends State<HomeList> {
                       )
                     : null,
               ],
-              icon: Icon(
-                Icons.account_circle,
-                color: user.token != null ? Colors.lightGreen : Colors.white,
-                size: 30,
+              icon: Hero(
+                tag: 'account',
+                child: Icon(
+                  Icons.account_circle,
+                  color: user.token != null ? Colors.lightGreen : Colors.white,
+                  size: 30,
+                ),
               ),
               onSelected: (value) => {
                 print('Value = $value'),
                 if (value == 1)
                   // navigera till login/signup sidan
-                  {Navigator.pushNamed(context, Login.PATH)}
+                  {
+                    // Navigator.pushNamed(context, Login.PATH),
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: Duration(seconds: 3),
+                        pageBuilder: (_, __, ___) => Login(),
+                      ),
+                    )
+                  }
                 else if (value == 2)
                   {print('Om mig NOT IMPLEMENTED')}
                 else if (value == 3)

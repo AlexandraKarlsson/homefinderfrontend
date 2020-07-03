@@ -76,6 +76,13 @@ class _LoginState extends State<Login> {
           key: this._formKey,
           child: Column(
             children: <Widget>[
+              Align(
+                alignment: Alignment.topLeft,
+                child: Hero(
+                  tag: 'account',
+                  child: Icon(Icons.account_circle, size: 90),
+                ),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -116,7 +123,13 @@ class _LoginState extends State<Login> {
               Text('Inget konto?'),
               RaisedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AddUser.PATH);
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: Duration(seconds: 3),
+                        pageBuilder: (_, __, ___) => AddUser(),
+                      ),
+                    );
                   },
                   child: Text('Skapa konto')),
             ],
