@@ -33,12 +33,28 @@ class HomeListItem extends StatelessWidget {
                 style: TextStyle(fontSize: 12)),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
                   Home.formatCurrency(home.price, 'kr'),
                   style: TextStyle(fontSize: 14),
                 ),
-                Icon(Icons.shopping_cart)
+                Container(                  
+                  width: 70,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,                  
+                    children: <Widget>[
+                      Icon(Icons.star_border),
+                      SizedBox(width: 4,),
+                      InkWell(
+                        child: Icon(Icons.shopping_cart),
+                        onTap: () {
+                          print('Cart clicked');
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

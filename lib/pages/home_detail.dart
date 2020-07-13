@@ -122,6 +122,21 @@ class _HomeDetailState extends State<HomeDetail> {
       return Scaffold(
         appBar: AppBar(
           title: Text(appBarText),
+          actions: <Widget>[
+            InkWell(
+              child: const Icon(Icons.star_border),
+              onTap: () {
+                
+              },
+            ),
+           /* AnimatedIcon(
+              icon: const Icon(Icons.shopping_cart),
+              tooltip: 'Lägg till i kundvagn',
+              onPressed: () {
+                
+              },
+            ),*/
+          ],
         ),
         body: Container(
           color: Colors.blue[50],

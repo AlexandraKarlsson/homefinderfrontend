@@ -8,14 +8,16 @@ import 'pages/add_image.dart';
 import 'pages/home_list.dart';
 import 'pages/login.dart';
 import 'pages/add_user.dart';
-import 'playground/popup.dart';
 
 import 'data/settings.dart';
 import 'data/brokers.dart';
 import 'data/user.dart';
 
 import 'test.dart';
+import 'playground/popup.dart';
+import 'playground/spinner_page.dart';
 import 'playground/hero_animation_from.dart';
+import 'playground/animation_page.dart';
 
 /*
 To start the emulator:
@@ -43,6 +45,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         // initialRoute: HeroAnimationFrom.PATH,
+        // initialRoute: AnimationPage.PATH,
         routes: {
           '/': (context) => HomeList(),
           HomeList.PATH: (context) => HomeList(),
@@ -56,6 +59,8 @@ class MyApp extends StatelessWidget {
           Test.TEST_PATH: (context) => Test(),
           PopUp.PATH: (context) => PopUp(),
           HeroAnimationFrom.PATH: (context) => HeroAnimationFrom(),
+          SpinnerPage.PATH: (context) => SpinnerPage(),
+          AnimationPage.PATH: (context) => AnimationPage(),
         },
       ),
     );
