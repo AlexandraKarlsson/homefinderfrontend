@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../widgets/form_field_text.dart';
 import '../data/user.dart';
+import '../data/favorites.dart';
 import 'add_user.dart';
 
 class LoginData {
@@ -24,8 +25,8 @@ class _LoginState extends State<Login> {
   LoginData loginData = LoginData();
   bool _isSaving = false;
 
-  Future<void> saveData(BuildContext context) async {
-    var url = 'http://10.0.2.2:8000/user/login';
+  Future<void> login(BuildContext context) async {
+    var urlLogin = 'http://10.0.2.2:8000/user/login';
     var headers = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8'
     };
@@ -38,7 +39,7 @@ class _LoginState extends State<Login> {
     print('loginJson = $loginJson');
 
     final response = await http.post(
-      url,
+      urlLogin,
       headers: headers,
       body: loginJson,
     );
@@ -58,8 +59,23 @@ class _LoginState extends State<Login> {
       print('token, $token');
 
       loggedInUser.set(username, email, token);
+
+// Fetch favorites
+      var urlFavorite = 'http://10.0.2.2:8000/favorite';
+      var headersFavorite = <String, String>{'x-auth': token};
+
+      final responseFavorite =
+          await http.get(urlFavorite, headers: headersFavorite);
+      if (responseFavorite.statusCode == 200) {
+        Favorites favorites = Provider.of<Favorites>(context);
+        var favoriteData =
+            convert.json.decode(responseFavorite.body) as List<dynamic>;
+        favorites.add(favoriteData);
+      } else {
+        print('Favorite request failed with status: ${responseFavorite.statusCode}.');
+      }
     } else {
-      print('Request failed with status: ${response.statusCode}.');
+      print('Login request failed with status: ${response.statusCode}.');
     }
   }
 
@@ -110,7 +126,7 @@ class _LoginState extends State<Login> {
                     setState(() {
                       _isSaving = true;
                     });
-                    saveData(context).then((_) {
+                    login(context).then((_) {
                       setState(() {
                         _isSaving = false;
                       });

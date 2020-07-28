@@ -9,11 +9,12 @@ import 'package:http/http.dart' as http;
 import '../data/apartment.dart';
 import '../data/house.dart';
 import '../data/home.dart';
+import '../data/user.dart';
 import '../data/broker.dart';
 import '../data/brokers.dart';
+import '../data/favorites.dart';
 import '../widgets/image_viewer.dart';
 import '../widgets/home_item.dart';
-
 
 class HomeDetail extends StatefulWidget {
   static const HOME_PATH = 'home';
@@ -102,11 +103,54 @@ class _HomeDetailState extends State<HomeDetail> {
     return homeItemList;
   }
 
-  @override
-  Widget build(BuildContext context) { 
+  Future<void> updateFavorites(Favorites favorites, String token) async {
+    bool addFavorite = !favorites.exists(widget.home.id);
+    if (addFavorite) {
+      const url = 'http://10.0.2.2:8000/favorite';
+      final headers = <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth': token
+      };
+      final newFavoriteData = {
+        'homeid': widget.home.id,
+      };
+      final newFavoriteDataJson = convert.jsonEncode(newFavoriteData);
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: newFavoriteDataJson,
+      );
+      if (response.statusCode == 201) {
+        favorites.put(widget.home.id);
+      } else {
+        print(
+            'Add favorites request failed with status: ${response.statusCode}.');
+      }
+    } else {
+      // removeFavorite
+      final url = 'http://10.0.2.2:8000/favorite/${widget.home.id}';
+      print('url = $url');
+      final headers = <String, String>{'x-auth': token};
+      final response = await http.delete(
+        url,
+        headers: headers,
+      );
 
-    Brokers brokers = Provider.of<Brokers>(context, listen: false); 
-    Broker broker = brokers.brokers[widget.home.brokerId];   
+      if (response.statusCode == 200) {
+        favorites.remove(widget.home.id);
+      } else {
+        print(
+            'Remove favorites request failed with status: ${response.statusCode}.');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Favorites favorites = Provider.of<Favorites>(context);
+    User user = Provider.of<User>(context);
+    Brokers brokers = Provider.of<Brokers>(context, listen: false);
+    Broker broker = brokers.brokers[widget.home.brokerId];
     String appBarText;
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
@@ -124,12 +168,14 @@ class _HomeDetailState extends State<HomeDetail> {
           title: Text(appBarText),
           actions: <Widget>[
             InkWell(
-              child: const Icon(Icons.star_border),
+              child: Icon(favorites.exists(widget.home.id)
+                  ? Icons.star
+                  : Icons.star_border),
               onTap: () {
-                
+                updateFavorites(favorites, user.token);
               },
             ),
-           /* AnimatedIcon(
+            /* AnimatedIcon(
               icon: const Icon(Icons.shopping_cart),
               tooltip: 'Lägg till i kundvagn',
               onPressed: () {
@@ -194,10 +240,8 @@ class _HomeDetailState extends State<HomeDetail> {
                     broker.name,
                     style: TextStyle(fontSize: 14),
                   ),
-                  subtitle:
-                      Text(broker.email, style: TextStyle(fontSize: 12)),
-                  trailing:
-                      Text(broker.phone, style: TextStyle(fontSize: 12)),
+                  subtitle: Text(broker.email, style: TextStyle(fontSize: 12)),
+                  trailing: Text(broker.phone, style: TextStyle(fontSize: 12)),
                 ),
               ),
             ],

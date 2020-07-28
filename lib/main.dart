@@ -12,6 +12,7 @@ import 'pages/add_user.dart';
 import 'data/settings.dart';
 import 'data/brokers.dart';
 import 'data/user.dart';
+import 'data/favorites.dart';
 
 import 'test.dart';
 import 'playground/popup.dart';
@@ -36,7 +37,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<Settings>(create: (_) => Settings()),
         ChangeNotifierProvider<User>(create: (_) => User()),
+        ChangeNotifierProvider<Favorites>(create: (_) => Favorites()),
         Provider<Brokers>(create: (_) => Brokers()),
+        
       ],
       child: MaterialApp(
         title: 'Hitta hemmet',

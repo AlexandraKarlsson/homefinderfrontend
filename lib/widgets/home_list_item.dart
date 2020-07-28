@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../pages/home_detail.dart';
 import '../data/home.dart';
+import '../data/favorites.dart';
 
 class HomeListItem extends StatelessWidget {
   final Home home;
@@ -10,6 +12,8 @@ class HomeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Favorites favorites = Provider.of<Favorites>(context);
+
     return Container(
       child: Card(
         elevation: 5,
@@ -43,8 +47,8 @@ class HomeListItem extends StatelessWidget {
                   width: 70,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,                  
-                    children: <Widget>[
-                      Icon(Icons.star_border),
+                    children: <Widget>[                      
+                      Icon(favorites.exists(home.id) ? Icons.star : Icons.star_border),
                       SizedBox(width: 4,),
                       InkWell(
                         child: Icon(Icons.shopping_cart),
