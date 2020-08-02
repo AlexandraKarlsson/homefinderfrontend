@@ -14,6 +14,8 @@ import '../data/houses.dart';
 import '../data/house.dart';
 import '../data/home.dart';
 import '../data/user.dart';
+import '../data/favorite.dart';
+import '../data/favorites.dart';
 import '../data/settings.dart';
 import 'login.dart';
 
@@ -145,6 +147,7 @@ class _HomeListState extends State<HomeList> {
       User user = Provider.of<User>(context);
       Settings settings = Provider.of<Settings>(context);
       Brokers brokersContext = Provider.of<Brokers>(context);
+      Favorites favorites = Provider.of<Favorites>(context);
       brokers.brokers
           .forEach((key, broker) => {brokersContext.addIfNotExists(broker)});
 
@@ -156,10 +159,25 @@ class _HomeListState extends State<HomeList> {
         homeListTemp.addAll(houses.houses);
       }
 
+      List<Home> homeListTemp2 = List<Home>();
+      if (settings.showFavorites) {
+        bool isFavorite;
+        if(homeListTemp.isNotEmpty) {
+          homeListTemp.forEach((home) => {
+            isFavorite = favorites.exists(home.id),
+            if (isFavorite) {
+              homeListTemp2.add(home)
+            }
+          });
+        }
+      } else {
+        homeListTemp2 = homeListTemp;
+      }
+
       List<Home> homeList = List<Home>();
-      for (int index = 0; index < homeListTemp.length; index++) {
-        if (homeListTemp[index].address.startsWith(settings.search)) {
-          homeList.add(homeListTemp[index]);
+      for (int index = 0; index < homeListTemp2.length; index++) {
+        if (homeListTemp2[index].address.startsWith(settings.search)) {
+          homeList.add(homeListTemp2[index]);
         }
       }
       // print('showApartment=${settings.showApartment}, showHouses=${settings.showHouse}, search=${settings.search},items=${homeList.length}');

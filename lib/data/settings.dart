@@ -4,6 +4,7 @@ class Settings extends ChangeNotifier {
   String search = '';
   bool showApartment = true;
   bool showHouse = true;
+  bool showFavorites = false;
 
   void changeSearchString(String newSearch) {
     search = newSearch;
@@ -17,6 +18,11 @@ class Settings extends ChangeNotifier {
 
   void changeShowHouse(bool newState) {
     showHouse = newState;
+    notifyListeners();
+  }
+
+  void changeShowFavorites(bool newState) {
+    showFavorites = newState;
     notifyListeners();
   }
 }

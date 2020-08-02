@@ -31,4 +31,9 @@ class Favorites extends ChangeNotifier {
     return favorites.containsKey(homeId);
   }
 
+  void clear() {
+    favorites = Map<int,Favorite>();
+    notifyListeners();
+  }
+
 }

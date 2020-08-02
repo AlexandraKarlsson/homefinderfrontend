@@ -83,6 +83,17 @@ class _MainDrawerState extends State<MainDrawer> {
                 dense: true,
                 activeColor: Colors.green,
               ),
+              user.token != null
+                  ? CheckboxListTile(
+                      title: new Text('Favoriter'),
+                      value: settings.showFavorites,
+                      onChanged: (value) {
+                        settings.changeShowFavorites(value);
+                      },
+                      dense: true,
+                      activeColor: Colors.green,
+                    )
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
@@ -103,35 +114,38 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
             ],
           ),
-          user.token != null ?
-          Column(
-            children: <Widget>[
-              Text('Lägg ut hem till försäljning:'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AddHouse.PATH);                        
-                      },
-                      child: const Text('Hus', style: TextStyle(fontSize: 16)),
+          user.token != null
+              ? Column(
+                  children: <Widget>[
+                    Text('Lägg ut hem till försäljning:'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, AddHouse.PATH);
+                            },
+                            child: const Text('Hus',
+                                style: TextStyle(fontSize: 16)),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, AddApartment.PATH);
+                            },
+                            child: const Text('Lägenhet',
+                                style: TextStyle(fontSize: 16)),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, AddApartment.PATH);
-                      },
-                      child: const Text('Lägenhet', style: TextStyle(fontSize: 16)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ) : Container(),
+                  ],
+                )
+              : Container(),
         ],
       ),
     );
