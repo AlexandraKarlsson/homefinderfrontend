@@ -172,7 +172,9 @@ class _HomeDetailState extends State<HomeDetail> {
                   ? Icons.star
                   : Icons.star_border),
               onTap: () {
-                updateFavorites(favorites, user.token);
+                if (user.token != null) {
+                  updateFavorites(favorites, user.token);
+                }
               },
             ),
             /* AnimatedIcon(

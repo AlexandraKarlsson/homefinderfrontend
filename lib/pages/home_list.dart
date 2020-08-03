@@ -180,8 +180,7 @@ class _HomeListState extends State<HomeList> {
           homeList.add(homeListTemp2[index]);
         }
       }
-      // print('showApartment=${settings.showApartment}, showHouses=${settings.showHouse}, search=${settings.search},items=${homeList.length}');
-
+      
       return Scaffold(
         appBar: AppBar(
           title: Text('Hitta hemmet'),
