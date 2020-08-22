@@ -162,13 +162,11 @@ class _HomeListState extends State<HomeList> {
       List<Home> homeListTemp2 = List<Home>();
       if (settings.showFavorites) {
         bool isFavorite;
-        if(homeListTemp.isNotEmpty) {
+        if (homeListTemp.isNotEmpty) {
           homeListTemp.forEach((home) => {
-            isFavorite = favorites.exists(home.id),
-            if (isFavorite) {
-              homeListTemp2.add(home)
-            }
-          });
+                isFavorite = favorites.exists(home.id),
+                if (isFavorite) {homeListTemp2.add(home)}
+              });
         }
       } else {
         homeListTemp2 = homeListTemp;
@@ -180,16 +178,22 @@ class _HomeListState extends State<HomeList> {
           homeList.add(homeListTemp2[index]);
         }
       }
-      
+
       return Scaffold(
         appBar: AppBar(
           title: Text('Hitta hemmet'),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(Icons.refresh, color: Colors.lightGreen,),
               tooltip: 'Uppdatera sidan',
               onPressed: () {
                 updateData();
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.gavel),
+              onPressed: () {
+
               },
             ),
             PopupMenuButton<int>(

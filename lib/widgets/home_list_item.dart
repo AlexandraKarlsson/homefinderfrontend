@@ -110,9 +110,9 @@ class HomeListItem extends StatelessWidget {
                         width: 4,
                       ),
                       InkWell(
-                        child: Icon(Icons.shopping_cart),
+                        child: Icon(Icons.gavel),
                         onTap: () {
-                          print('Cart clicked');
+                          print('Bid clicked');
                         },
                       ),
                     ],

@@ -18,6 +18,7 @@ class House extends Home {
     image,
     images,
     brokerId,
+    saleId,
     this.cadastral,
     this.structure,
     this.plotSize,
@@ -34,5 +35,6 @@ class House extends Home {
           image,
           images,
           brokerId,
+          saleId,
         );
 }

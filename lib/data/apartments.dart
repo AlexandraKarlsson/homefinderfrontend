@@ -20,7 +20,7 @@ class Apartments {
    */
   void add(Map<String, dynamic> apartmentMap) {
     apartmentMap['rows'].forEach((apartment) {
-      int id = apartment['id'];
+      int id = apartment['homeid'];
       String address = apartment['address'];
       String description = apartment['description'];
       int livingSpace = apartment['livingspace'];
@@ -31,6 +31,7 @@ class Apartments {
       String image = apartment['image'];
       List<String> images = apartment['images'];
       int brokerId = apartment['brokerid'];
+      int saleId = apartment['saleid'];
       int apartmentNumber = apartment['apartmentnumber'];
       int charge = apartment['charge'];
       Apartment newApartment = Apartment(
@@ -45,6 +46,7 @@ class Apartments {
           image,
           images,
           brokerId,
+          saleId,
           apartmentNumber,
           charge);
       apartments.add(newApartment);
@@ -62,7 +64,9 @@ class Apartments {
       }
     });
   }
+}
 
+/*
   void addTestData() {
     Apartment apartment = Apartment(
       1,
@@ -119,6 +123,8 @@ class Apartments {
     apartments.add(apartment);
   }
 }
+
+*/
 
 /*
  "address": "Surbrunnsgatan 24",

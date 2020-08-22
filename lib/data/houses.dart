@@ -9,7 +9,7 @@ class Houses {
 
   void add(Map<String, dynamic> houseMap) {
     houseMap['rows'].forEach((house) {
-      int id = house['id'];
+      int id = house['homeid'];
       String address = house['address'];
       String description = house['description'];
       int livingSpace = house['livingspace'];
@@ -20,6 +20,7 @@ class Houses {
       String image = house['image'];
       List<String> images = house['images'];
       int brokerId = house['brokerid'];
+      int saleId = house['saleid'];
       String cadastral = house['cadastral'];
       String structure = house['structure'];
       int plotSize = house['plotsize'];
@@ -36,6 +37,7 @@ class Houses {
         image,
         images,
         brokerId,
+        saleId,
         cadastral,
         structure,
         plotSize,
@@ -44,7 +46,9 @@ class Houses {
       houses.add(newHouse);
     });
   }
+}
 
+/*
   void addHouses() {
     House house = House(
       4,
@@ -107,3 +111,4 @@ class Houses {
     houses.add(house);
   }
 }
+*/
