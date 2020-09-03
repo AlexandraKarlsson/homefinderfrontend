@@ -57,6 +57,84 @@ class HomeListItem extends StatelessWidget {
       }
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    Favorites favorites = Provider.of<Favorites>(context);
+    User user = Provider.of<User>(context);
+
+    return Container(
+      child: Card(
+        elevation: 5,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => HomeDetail(home)));
+          },
+          child: ListTile(
+            leading: Image.network(
+              'http://10.0.2.2:8010/images/${home.image}',
+            ),
+            title: Text(
+              home.address,
+              style: TextStyle(fontSize: 14),
+            ),
+            subtitle: Text(
+                'Area: ${home.livingSpace}, Antal rum: ${home.rooms}',
+                style: TextStyle(fontSize: 12)),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  Home.formatCurrency(home.price, 'kr'),
+                  style: TextStyle(fontSize: 14),
+                ),
+                Container(
+                  width: 70,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      InkWell(
+                        child: Icon(favorites.exists(home.id)
+                            ? Icons.star
+                            : Icons.star_border),
+                        onTap: () {
+                          if (user.token != null) {
+                            updateFavorites(favorites, user.token);
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      InkWell(
+                        child: Icon(Icons.gavel),
+                        onTap: () {
+                          print('Bid clicked');
+                          Navigator.pushNamed(
+                            context,
+                            MakeBid.PATH,
+                            arguments: home,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
 /* 
   Future<void> createBid(
       BuildContext context, int biddingPrice, String token) async {
@@ -175,78 +253,3 @@ class HomeListItem extends StatelessWidget {
       },
     );
   } */
-
-  @override
-  Widget build(BuildContext context) {
-    Favorites favorites = Provider.of<Favorites>(context);
-    User user = Provider.of<User>(context);
-
-    return Container(
-      child: Card(
-        elevation: 5,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => HomeDetail(home)));
-          },
-          child: ListTile(
-            leading: Image.network(
-              'http://10.0.2.2:8010/images/${home.image}',
-            ),
-            title: Text(
-              home.address,
-              style: TextStyle(fontSize: 14),
-            ),
-            subtitle: Text(
-                'Area: ${home.livingSpace}, Antal rum: ${home.rooms}',
-                style: TextStyle(fontSize: 12)),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Text(
-                  Home.formatCurrency(home.price, 'kr'),
-                  style: TextStyle(fontSize: 14),
-                ),
-                Container(
-                  width: 70,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      InkWell(
-                        child: Icon(favorites.exists(home.id)
-                            ? Icons.star
-                            : Icons.star_border),
-                        onTap: () {
-                          if (user.token != null) {
-                            updateFavorites(favorites, user.token);
-                          }
-                        },
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      InkWell(
-                        child: Icon(Icons.gavel),
-                        onTap: () {
-                          print('Bid clicked');
-                          Navigator.pushNamed(
-                            context,
-                            MakeBid.PATH,
-                            arguments: home,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

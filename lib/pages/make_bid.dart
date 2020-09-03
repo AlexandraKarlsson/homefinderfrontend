@@ -7,6 +7,10 @@ import 'package:http/http.dart' as http;
 
 import '../data/home.dart';
 import '../data/user.dart';
+import '../data/apartment.dart';
+import '../data/apartments.dart';
+import '../data/house.dart';
+import '../data/houses.dart';
 
 class MakeBid extends StatefulWidget {
   static const String PATH = 'makeBid';
@@ -41,6 +45,17 @@ class _MakeBidState extends State<MakeBid> {
       body: newBidDataJson,
     );
     if (response.statusCode == 201) {
+      if (home is Apartment) {
+        print('Home is an Apartment');
+        Apartments apartments = Provider.of<Apartments>(context);
+        apartments.changePrice(home.id, biddingPrice);
+      } else if (home is House) {
+        print('Home is an House');
+        Houses houses = Provider.of<Houses>(context);
+        houses.changePrice(home.id, biddingPrice);
+      } else {
+        print('Home is unknown');
+      }
       return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -89,7 +104,6 @@ class _MakeBidState extends State<MakeBid> {
                       fontWeight: FontWeight.bold,
                     )),
                 onPressed: () {
-
                   Navigator.of(context).pop();
                 },
               ),
@@ -100,7 +114,7 @@ class _MakeBidState extends State<MakeBid> {
     }
   }
 
-  Future<void> updatePrice(String token,Home home) async {
+  Future<void> updatePrice(String token, Home home) async {
     final url = 'http://10.0.2.2:8000/bid/highest/${home.saleId}';
     print('url=$url');
     final headers = <String, String>{
@@ -112,12 +126,25 @@ class _MakeBidState extends State<MakeBid> {
       headers: headers,
     );
     if (response.statusCode == 200) {
-      print('updatePrice successful');           
+
+      print('updatePrice successful');
       final data = convert.json.decode(response.body) as dynamic;
       print(data);
       print(data["result"]);
       final highestPrice = data["result"];
-      home.price = highestPrice;
+
+      if (home is Apartment) {
+        print('Home is an Apartment');
+        Apartments apartments = Provider.of<Apartments>(context);
+        apartments.changePrice(home.id, highestPrice);
+      } else if (home is House) {
+        print('Home is an House');
+        Houses houses = Provider.of<Houses>(context);
+        houses.changePrice(home.id, highestPrice);
+      } else {
+        print('Home is unknown');
+      }
+      
     } else {
       print('updatePrice failed');
       print(response);
@@ -126,8 +153,22 @@ class _MakeBidState extends State<MakeBid> {
 
   @override
   Widget build(BuildContext context) {
-    home = ModalRoute.of(context).settings.arguments;
     user = Provider.of<User>(context);
+    home = ModalRoute.of(context).settings.arguments;
+
+    /*
+    if (home is Apartment) {
+      print('Home is an Apartment');
+    } else if (home is House) {
+      print('Home is an House');
+    } else {
+      print('Home is unknown');
+    }
+
+    
+    Apartments apartments = Provider.of<Apartments>(context);
+    Houses houses = Provider.of<Houses>(context);
+*/
 
     return Scaffold(
       appBar: AppBar(title: Text('Buda')),
@@ -170,16 +211,14 @@ class _MakeBidState extends State<MakeBid> {
                 onPressed: () {
                   int biddingPrice = int.parse(priceController.text);
                   print('Ditt budpris: ${biddingPrice.toString()}');
-                  
 
                   // TODO: Check if the bidding price is lower then the original price
                   createBid(context, biddingPrice, user.token);
                   print('Update highest price');
-                  updatePrice(user.token,home);
-                  
+                  updatePrice(user.token, home);
+
                   // TODO: Show alert with spinner if possible
                   // TODO: If bid was unsuccessful update price and show dialog
-              
                 },
               ),
             ],
@@ -189,4 +228,3 @@ class _MakeBidState extends State<MakeBid> {
     );
   }
 }
-
