@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homefinderfrontend/data/apartments.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/add_house.dart';
@@ -8,10 +9,13 @@ import 'pages/add_image.dart';
 import 'pages/home_list.dart';
 import 'pages/login.dart';
 import 'pages/add_user.dart';
+import 'pages/make_bid.dart';
 
 import 'data/settings.dart';
 import 'data/brokers.dart';
 import 'data/user.dart';
+import 'data/apartments.dart';
+import 'data/houses.dart';
 import 'data/favorites.dart';
 
 import 'test.dart';
@@ -38,7 +42,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Settings>(create: (_) => Settings()),
         ChangeNotifierProvider<User>(create: (_) => User()),
         ChangeNotifierProvider<Favorites>(create: (_) => Favorites()),
+        ChangeNotifierProvider<Apartments>(create: (_) => Apartments()),
+        ChangeNotifierProvider<Houses>(create: (_) => Houses()),
         Provider<Brokers>(create: (_) => Brokers()),
+        
         
       ],
       child: MaterialApp(
@@ -58,6 +65,7 @@ class MyApp extends StatelessWidget {
           AddImage.PATH: (context) => AddImage(),
           AddUser.PATH: (context) => AddUser(),
           Login.PATH: (context) => Login(),
+          MakeBid.PATH: (context) => MakeBid(),
           // HomeDetail.HOME_PATH: (context) => HomeDetail(),
           Test.TEST_PATH: (context) => Test(),
           PopUp.PATH: (context) => PopUp(),

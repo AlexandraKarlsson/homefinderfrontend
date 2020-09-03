@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'house.dart';
 
-class Houses {
+class Houses extends ChangeNotifier {
   List<House> houses = [];
 
   Houses() {
@@ -8,6 +9,7 @@ class Houses {
   }
 
   void add(Map<String, dynamic> houseMap) {
+    clear();
     houseMap['rows'].forEach((house) {
       int id = house['homeid'];
       String address = house['address'];
@@ -45,6 +47,19 @@ class Houses {
       );
       houses.add(newHouse);
     });
+  }
+
+  void changePrice(int homeId, int newPrice) {
+    houses.forEach((house) {
+      if(house.id == homeId) {
+        house.price = newPrice;
+      }
+    });
+    notifyListeners();
+  }
+
+  void clear() {
+    houses.clear();
   }
 }
 

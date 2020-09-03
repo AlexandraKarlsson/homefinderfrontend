@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'apartment.dart';
 
-class Apartments {
+class Apartments extends ChangeNotifier {
   List<Apartment> apartments = [];
 
   Apartments() {
@@ -19,6 +21,7 @@ class Apartments {
   final List<String> images;
    */
   void add(Map<String, dynamic> apartmentMap) {
+    clear();
     apartmentMap['rows'].forEach((apartment) {
       int id = apartment['homeid'];
       String address = apartment['address'];
@@ -53,16 +56,17 @@ class Apartments {
     });
   }
 
-  void setImage(Map<String, dynamic> imageMap) {
-    imageMap['rows'].forEach((image) {
-      int homeId = image['homeid'];
-      String imageName = image['imagename'];
-      for (int index = 0; index < apartments.length; index++) {
-        if (apartments[index].id == homeId) {
-          apartments[index].image = imageName;
-        }
+  void changePrice(int homeId, int newPrice) {
+    apartments.forEach((apartment) {
+      if (apartment.id == homeId) {
+        apartment.price = newPrice;
       }
     });
+    notifyListeners();
+  }
+
+  void clear() {
+    apartments.clear();
   }
 }
 

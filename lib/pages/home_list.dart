@@ -14,13 +14,12 @@ import '../data/houses.dart';
 import '../data/house.dart';
 import '../data/home.dart';
 import '../data/user.dart';
-import '../data/favorite.dart';
 import '../data/favorites.dart';
 import '../data/settings.dart';
 import 'login.dart';
 
 class HomeList extends StatefulWidget {
-  static const PATH = 'list';
+  static const PATH = '/list';
 
   @override
   _HomeListState createState() => _HomeListState();
@@ -28,14 +27,15 @@ class HomeList extends StatefulWidget {
 
 class _HomeListState extends State<HomeList> {
   Brokers brokers;
-  Apartments apartments;
-  Houses houses;
+  // Apartments apartments;
+  // Houses houses;
 
   var _isInit = true;
   var _isLoading = false;
 
   @override
   void initState() {
+    
     super.initState();
     if (_isInit) {
       setState(() {
@@ -61,15 +61,23 @@ class _HomeListState extends State<HomeList> {
     });
   }
 
+  /*
+  void didChangeDependencies(BuildContext context) {
+    super.didChangeDependencies();
+  }
+  */ 
+
   Future<void> fetch() async {
     // print('Inside fetch ...');
+    Apartments apartments = Provider.of<Apartments>(context, listen: false);
+    Houses houses = Provider.of<Houses>(context, listen: false);
     brokers = Brokers();
-    apartments = Apartments();
-    houses = Houses();
+    // apartments = Apartments();
+    // houses = Houses();
     await fetchBrokers();
-    await fetchApartments();
-    await fetchHouses();
-    await fetchImage();
+    await fetchApartments(apartments);
+    await fetchHouses(houses);
+    await fetchImage(apartments,houses);
   }
 
   Future<Map<String, dynamic>> fetchData(String url) async {
@@ -90,7 +98,7 @@ class _HomeListState extends State<HomeList> {
     brokers.add(brokerData);
   }
 
-  void setImage(Map<String, dynamic> imageMap) {
+  void setImage(Apartments apartments,Houses houses,Map<String, dynamic> imageMap) {
     if (imageMap != null) {
       Map<int, String> images = {};
       imageMap['rows'].forEach((image) {
@@ -109,19 +117,19 @@ class _HomeListState extends State<HomeList> {
     }
   }
 
-  Future<void> fetchImage() async {
+  Future<void> fetchImage(Apartments apartments,Houses houses) async {
     var url = 'http://10.0.2.2:8000/homes/image';
     final imageData = await fetchData(url);
-    setImage(imageData);
+    setImage(apartments,houses, imageData);
   }
 
-  Future<void> fetchApartments() async {
+  Future<void> fetchApartments(Apartments apartments) async {
     var url = 'http://10.0.2.2:8000/apartment';
     final apartmentData = await fetchData(url);
     apartments.add(apartmentData);
   }
 
-  Future<void> fetchHouses() async {
+  Future<void> fetchHouses(Houses houses) async {
     var url = 'http://10.0.2.2:8000/house';
     final houseData = await fetchData(url);
     houses.add(houseData);
@@ -141,6 +149,7 @@ class _HomeListState extends State<HomeList> {
 
   @override
   Widget build(BuildContext context) {
+
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
     } else {
@@ -148,6 +157,10 @@ class _HomeListState extends State<HomeList> {
       Settings settings = Provider.of<Settings>(context);
       Brokers brokersContext = Provider.of<Brokers>(context);
       Favorites favorites = Provider.of<Favorites>(context);
+      Apartments apartments = Provider.of<Apartments>(context);
+      Houses houses = Provider.of<Houses>(context);
+
+
       brokers.brokers
           .forEach((key, broker) => {brokersContext.addIfNotExists(broker)});
 
