@@ -10,7 +10,4 @@ class Bid extends ChangeNotifier {
     this.userId,
     this.price,
   );
-
-
-
 }

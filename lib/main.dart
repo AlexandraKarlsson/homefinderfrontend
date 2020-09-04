@@ -32,7 +32,6 @@ To start the emulator:
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     print('build in myApp running...');
@@ -44,10 +43,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Favorites>(create: (_) => Favorites()),
         ChangeNotifierProvider<Apartments>(create: (_) => Apartments()),
         ChangeNotifierProvider<Houses>(create: (_) => Houses()),
-        Provider<Brokers>(create: (_) => Brokers()),
-        
-        
+        Provider<Brokers>(create: (_) => Brokers()),        
       ],
+
       child: MaterialApp(
         title: 'Hitta hemmet',
         theme: ThemeData(

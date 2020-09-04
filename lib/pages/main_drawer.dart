@@ -58,7 +58,6 @@ class _MainDrawerState extends State<MainDrawer> {
                 controller: controller,
                 onChanged: (value) {
                   print('search=$value');
-                  // controller.text = value;
                   settings.changeSearchString(value);
                 },
               ),

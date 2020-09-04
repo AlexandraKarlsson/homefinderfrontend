@@ -23,6 +23,8 @@ class _AddUserState extends State<AddUser> {
   UserData userData = UserData();
   bool _isSaving = false;
 
+  // TODO: In
+
   Future<void> saveData(BuildContext context) async {
     var url = 'http://10.0.2.2:8000/user';
     var headers = <String, String>{
@@ -74,82 +76,86 @@ class _AddUserState extends State<AddUser> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Skapa användare'),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(8),
-        color: Colors.blue[50],
-        child: Form(
-          key: this._formKey,
-          child: Column(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topRight,
-                child: Hero(
-                  tag: 'account',
-                  child: Icon(Icons.account_circle, size: 30),
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      FormFieldText(
-                          label: 'Användarnamn',
-                          onSave: (String value) {
-                            userData.username = value;
-                          }),
-                      FormFieldText(
-                          label: 'Email',
-                          onSave: (String value) {
-                            userData.email = value;
-                          }),
-                      FormFieldText(
-                        label: 'Lösenord',
-                        onSave: (String value) {
-                          userData.password = value;
-                        },
-                        obscureText: true,
-                      ),
-                      FormFieldText(
-                        label: 'Verifiera lösenord',
-                        onSave: (String value) {
-                          userData.verifyPassword = value;
-                        },
-                        obscureText: true,
-                      ),
-                    ],
+    /*if (_isSaving) {
+      return Center(child: CircularProgressIndicator());
+    } else {*/
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Skapa användare'),
+        ),
+        body: Container(
+          padding: EdgeInsets.all(8),
+          color: Colors.blue[50],
+          child: Form(
+            key: this._formKey,
+            child: Column(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Hero(
+                    tag: 'account',
+                    child: Icon(Icons.account_circle, size: 30),
                   ),
                 ),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    setState(() {
-                      _isSaving = true;
-                    });
-                    if (userData.password == userData.verifyPassword) {
-                      saveData(context).then((_) {
-                        setState(() {
-                          _isSaving = false;
-                        });
-                        Navigator.pop(context);
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        FormFieldText(
+                            label: 'Användarnamn',
+                            onSave: (String value) {
+                              userData.username = value;
+                            }),
+                        FormFieldText(
+                            label: 'Email',
+                            onSave: (String value) {
+                              userData.email = value;
+                            }),
+                        FormFieldText(
+                          label: 'Lösenord',
+                          onSave: (String value) {
+                            userData.password = value;
+                          },
+                          obscureText: true,
+                        ),
+                        FormFieldText(
+                          label: 'Verifiera lösenord',
+                          onSave: (String value) {
+                            userData.verifyPassword = value;
+                          },
+                          obscureText: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      setState(() {
+                        _isSaving = true;
                       });
-                    } else {
-                      _showDialog("Felmeddelande",
-                          "Lösenorden matchar inte, var vänlig försök igen!");
+                      if (userData.password == userData.verifyPassword) {
+                        saveData(context).then((_) {
+                          setState(() {
+                            _isSaving = false;
+                          });
+                          Navigator.pop(context);
+                        });
+                      } else {
+                        _showDialog("Felmeddelande",
+                            "Lösenorden matchar inte, var vänlig försök igen!");
+                      }
                     }
-                  }
-                },
-                child: Text('Skapa'),
-              ),
-            ],
+                  },
+                  child: Text('Skapa'),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    //}
   }
 }

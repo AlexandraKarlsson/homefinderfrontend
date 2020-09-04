@@ -1,7 +1,6 @@
-// import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
-class Home /* extends ChangeNotifier */ {
+class Home {
   final int id;
   final String address;
   final String description;
@@ -29,8 +28,6 @@ class Home /* extends ChangeNotifier */ {
     this.brokerId,
     this.saleId,
   );
-
- 
 
   static String formatCurrency(int price, String unit) {
     double priceD = price.toDouble();

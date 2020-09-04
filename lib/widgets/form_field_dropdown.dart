@@ -7,7 +7,7 @@ class FormFieldDropdown extends StatelessWidget {
   final Function onChanged;
   final Function getValue;
 
-  FormFieldDropdown(@required this.onChanged, @required this.getValue);
+  FormFieldDropdown(this.onChanged,this.getValue);
 
   List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
     List<DropdownMenuItem<String>> menuItems = [];
@@ -17,7 +17,6 @@ class FormFieldDropdown extends StatelessWidget {
             value: '${broker.id}',
           ))
         });
-    // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
     return menuItems;
   }
 

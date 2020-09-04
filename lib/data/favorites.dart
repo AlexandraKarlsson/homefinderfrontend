@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'favorite.dart';
 
-
 class Favorites extends ChangeNotifier {
   Map<int,Favorite> favorites = Map<int,Favorite>();
 
@@ -14,7 +13,6 @@ class Favorites extends ChangeNotifier {
       favorites[homeId] = newFavorite;
     });
   }
-
 
   void put(int homeId) {
     Favorite favorite = Favorite(homeId);

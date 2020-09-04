@@ -3,7 +3,6 @@ import 'broker.dart';
 class Brokers {
   Map<int,Broker> brokers = Map<int,Broker>();
 
-
 void add(Map<String, dynamic> brokerMap) {
     brokerMap['rows'].forEach((broker) {
       int id = broker['id'];
@@ -25,6 +24,5 @@ void add(Map<String, dynamic> brokerMap) {
     if(brokers[broker.id] == null) {
       brokers[broker.id] = broker;
     }
-  }
-  
+  }  
 }

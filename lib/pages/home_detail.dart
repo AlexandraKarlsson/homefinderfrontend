@@ -150,8 +150,10 @@ class _HomeDetailState extends State<HomeDetail> {
     Favorites favorites = Provider.of<Favorites>(context);
     User user = Provider.of<User>(context);
     Brokers brokers = Provider.of<Brokers>(context, listen: false);
+    
     Broker broker = brokers.brokers[widget.home.brokerId];
     String appBarText;
+
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
     } else {
@@ -177,13 +179,6 @@ class _HomeDetailState extends State<HomeDetail> {
                 }
               },
             ),
-            /* AnimatedIcon(
-              icon: const Icon(Icons.shopping_cart),
-              tooltip: 'Lägg till i kundvagn',
-              onPressed: () {
-                
-              },
-            ),*/
           ],
         ),
         body: Container(

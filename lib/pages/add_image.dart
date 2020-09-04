@@ -25,7 +25,7 @@ class _AddImageState extends State<AddImage> {
   }
 
   Future<void> _cropImage() async {
-    print('Inside _cropImage()...');
+    // print('Inside _cropImage()...');
     File cropped = await ImageCropper.cropImage(
       sourcePath: _imageFile.path,
       maxWidth: 512,

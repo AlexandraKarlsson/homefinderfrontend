@@ -60,7 +60,8 @@ class _LoginState extends State<Login> {
 
       loggedInUser.set(username, email, token);
 
-// Fetch favorites
+      // TODO: Refactor to separate method
+      // Fetch favorites
       var urlFavorite = 'http://10.0.2.2:8000/favorite';
       var headersFavorite = <String, String>{'x-auth': token};
 
@@ -81,6 +82,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Add spinner
     return Scaffold(
       appBar: AppBar(
         title: Text('Logga in'),

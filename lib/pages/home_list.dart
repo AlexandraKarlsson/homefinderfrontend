@@ -27,8 +27,6 @@ class HomeList extends StatefulWidget {
 
 class _HomeListState extends State<HomeList> {
   Brokers brokers;
-  // Apartments apartments;
-  // Houses houses;
 
   var _isInit = true;
   var _isLoading = false;
@@ -59,21 +57,13 @@ class _HomeListState extends State<HomeList> {
         _isLoading = false;
       });
     });
-  }
-
-  /*
-  void didChangeDependencies(BuildContext context) {
-    super.didChangeDependencies();
-  }
-  */ 
+  } 
 
   Future<void> fetch() async {
     // print('Inside fetch ...');
     Apartments apartments = Provider.of<Apartments>(context, listen: false);
     Houses houses = Provider.of<Houses>(context, listen: false);
     brokers = Brokers();
-    // apartments = Apartments();
-    // houses = Houses();
     await fetchBrokers();
     await fetchApartments(apartments);
     await fetchHouses(houses);
@@ -160,7 +150,7 @@ class _HomeListState extends State<HomeList> {
       Apartments apartments = Provider.of<Apartments>(context);
       Houses houses = Provider.of<Houses>(context);
 
-
+      // TODO: Go through the handling of brokers seems strange? 
       brokers.brokers
           .forEach((key, broker) => {brokersContext.addIfNotExists(broker)});
 
@@ -206,7 +196,7 @@ class _HomeListState extends State<HomeList> {
             IconButton(
               icon: const Icon(Icons.gavel),
               onPressed: () {
-
+                // TODO: implement page for all the users bid
               },
             ),
             PopupMenuButton<int>(
@@ -249,10 +239,8 @@ class _HomeListState extends State<HomeList> {
               ),
               onSelected: (value) => {
                 print('Value = $value'),
-                if (value == 1)
-                  // navigera till login/signup sidan
+                if (value == 1)                  
                   {
-                    // Navigator.pushNamed(context, Login.PATH),
                     Navigator.push(
                       context,
                       PageRouteBuilder(

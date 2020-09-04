@@ -126,7 +126,6 @@ class _MakeBidState extends State<MakeBid> {
       headers: headers,
     );
     if (response.statusCode == 200) {
-
       print('updatePrice successful');
       final data = convert.json.decode(response.body) as dynamic;
       print(data);
@@ -144,7 +143,6 @@ class _MakeBidState extends State<MakeBid> {
       } else {
         print('Home is unknown');
       }
-      
     } else {
       print('updatePrice failed');
       print(response);
@@ -155,20 +153,6 @@ class _MakeBidState extends State<MakeBid> {
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
     home = ModalRoute.of(context).settings.arguments;
-
-    /*
-    if (home is Apartment) {
-      print('Home is an Apartment');
-    } else if (home is House) {
-      print('Home is an House');
-    } else {
-      print('Home is unknown');
-    }
-
-    
-    Apartments apartments = Provider.of<Apartments>(context);
-    Houses houses = Provider.of<Houses>(context);
-*/
 
     return Scaffold(
       appBar: AppBar(title: Text('Buda')),
@@ -189,11 +173,15 @@ class _MakeBidState extends State<MakeBid> {
                 Home.formatCurrency(home.price, 'kr'),
                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
               ),
+              /*
+              Card(
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: ReadMoreText(home.description),
+                  )),
+              */
               SizedBox(height: 15),
-              /*Text(
-                    'Ditt bud',
-                    style: TextStyle(fontSize: 13),
-                  ),*/
               TextField(
                 controller: priceController,
                 keyboardType: TextInputType.number,

@@ -67,21 +67,9 @@ class _AddApartmentState extends State<AddApartment> {
     }
   }
 
-  /* List<DropdownMenuItem<String>> createDropDownMenuItems(Brokers brokers) {
-    List<DropdownMenuItem<String>> menuItems = [];
-    brokers.brokers.forEach((key, broker) => {
-          menuItems.add(DropdownMenuItem<String>(
-            child: Text(broker.name),
-            value: '${broker.id}',
-          ))
-        });
-    // menuItems.forEach((item) => {print('${item.value} : ${item.child}')});
-    return menuItems;
-  } */
-
   Widget buildApartmentForm(BuildContext context) {
-    // Brokers brokers = Provider.of<Brokers>(context, listen: false);
     User user = Provider.of<User>(context);
+    
     return Container(
       padding: EdgeInsets.all(8),
       color: Colors.blue[50],
