@@ -26,7 +26,8 @@ class _MakeBidState extends State<MakeBid> {
   User user;
   TextEditingController priceController = TextEditingController();
   bool _showBidHistory = false;
-  List<Bid> bids;
+  List<Bid> bids = [];
+  bool _isBusy = false;
 
   Future<void> createBid(
     BuildContext context,
@@ -209,88 +210,114 @@ class _MakeBidState extends State<MakeBid> {
     user = Provider.of<User>(context);
     home = ModalRoute.of(context).settings.arguments;
 
-    return Scaffold(
-      appBar: AppBar(title: Text('Buda')),
-      body: Container(
-        padding: EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text(
-                '${home.address}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8),
-              Image.network(
-                'http://10.0.2.2:8010/images/${home.image}',
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Aktuellt bud',
-                style: TextStyle(fontSize: 13),
-              ),
-              Row(
+    return _isBusy
+        ? Center(child: CircularProgressIndicator())
+        : Scaffold(
+            appBar: AppBar(title: Text('Buda')),
+            body: Container(
+              padding: EdgeInsets.all(15.0),
+              child: Column(
                 children: <Widget>[
-                  Text(
-                    Home.formatCurrency(home.price, 'kr'),
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          Text(
+                            '${home.address}',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 8),
+                          Image.network(
+                            'http://10.0.2.2:8010/images/${home.image}',
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Aktuellt bud',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                Home.formatCurrency(home.price, 'kr'),
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              ),
+                              IconButton(
+                                icon: _showBidHistory
+                                    ? Icon(Icons.keyboard_arrow_up)
+                                    : Icon(Icons.keyboard_arrow_down),
+                                onPressed: () {
+                                  if (_showBidHistory) {
+                                    setState(() {
+                                      _showBidHistory = false;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _isBusy = true;
+                                    });
+                                    fetchAllBids(user.token, home);
+                                    setState(() {
+                                      _showBidHistory = true;
+                                      _isBusy = false;
+                                    });
+                                  }
+                                },
+                              )
+                            ],
+                          ),
+                          _showBidHistory ? buildBidTable() : Container(),
+                          TextField(
+                            controller: priceController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              // border: OutlineInputBorder(),
+                              labelText: 'Ditt budpris',
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          RaisedButton(
+                            child: Text(
+                              'BUDA',
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () {
+                              int biddingPrice;
+                              try{
+                                biddingPrice = int.parse(priceController.text);
+                              } catch (error) {
+                                biddingPrice = 0;
+                              }
+                              print('Ditt budpris: ${biddingPrice.toString()}');
+                              if (home.price < biddingPrice) {
+                                print('Creating bid');
+                                setState(() {
+                                  _isBusy = true;
+                                });
+                                createBid(context, biddingPrice, user.token);
+                                print('Update highest price');
+                                updatePrice(user.token, home);
+                                setState(() {
+                                  _isBusy = false;
+                                });
+                              } else {
+                                showDialogMessage(
+                                  context,
+                                  "Inputfel",
+                                  "Ditt budpris är lägre än aktuellt budpris, höj budet!",
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  IconButton(
-                    icon: _showBidHistory
-                        ? Icon(Icons.keyboard_arrow_up)
-                        : Icon(Icons.keyboard_arrow_down),
-                    onPressed: () {
-                      if (_showBidHistory) {
-                        setState(() {
-                          _showBidHistory = false;
-                        });
-                      } else {
-                        fetchAllBids(user.token, home);
-                        setState(() {
-                          _showBidHistory = true;
-                        });
-                      }
-                    },
-                  )
                 ],
               ),
-              _showBidHistory ? buildBidTable() : Container(),
-              TextField(
-                controller: priceController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  // border: OutlineInputBorder(),
-                  labelText: 'Ditt budpris',
-                ),
-              ),
-              SizedBox(height: 15),
-              RaisedButton(
-                child: Text(
-                  'BUDA',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  int biddingPrice = int.parse(priceController.text);
-                  print('Ditt budpris: ${biddingPrice.toString()}');
-                  if (home.price < biddingPrice) {
-                    print('Creating bid');
-                    createBid(context, biddingPrice, user.token);
-                    print('Update highest price');
-                    updatePrice(user.token, home);
-                  } else {
-                    showDialogMessage(
-                      context,
-                      "Inputfel",
-                      "Ditt budpris är lägre än aktuellt budpris, höj budet!",
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
