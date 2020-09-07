@@ -18,6 +18,12 @@ import '../data/favorites.dart';
 import '../data/settings.dart';
 import 'login.dart';
 
+void checkForUpdates(BuildContext context) {
+  print('Running checkForUpdates ...');
+  Settings settings = Provider.of<Settings>(context);
+  print(settings);
+}
+
 class HomeList extends StatefulWidget {
   static const PATH = '/list';
 
@@ -27,14 +33,16 @@ class HomeList extends StatefulWidget {
 
 class _HomeListState extends State<HomeList> {
   Brokers brokers;
+  Timer timer;
 
   var _isInit = true;
   var _isLoading = false;
 
   @override
   void initState() {
-    
     super.initState();
+
+    // Add Timer.periodic
     if (_isInit) {
       setState(() {
         _isLoading = true;
@@ -46,6 +54,18 @@ class _HomeListState extends State<HomeList> {
         _isLoading = false;
       });
     });
+
+    // Setup periodic timer to call the backend for updates ...
+    // timer = Timer.periodic(
+    //   Duration(seconds: 10),
+    //   (Timer t) => checkForUpdates(context),
+    // );
+  }
+
+  @override
+  void dispose() {
+    // timer?.cancel();
+    super.dispose();
   }
 
   void updateData() {
@@ -57,7 +77,7 @@ class _HomeListState extends State<HomeList> {
         _isLoading = false;
       });
     });
-  } 
+  }
 
   Future<void> fetch() async {
     // print('Inside fetch ...');
@@ -67,7 +87,7 @@ class _HomeListState extends State<HomeList> {
     await fetchBrokers();
     await fetchApartments(apartments);
     await fetchHouses(houses);
-    await fetchImage(apartments,houses);
+    await fetchImage(apartments, houses);
   }
 
   Future<Map<String, dynamic>> fetchData(String url) async {
@@ -88,7 +108,8 @@ class _HomeListState extends State<HomeList> {
     brokers.add(brokerData);
   }
 
-  void setImage(Apartments apartments,Houses houses,Map<String, dynamic> imageMap) {
+  void setImage(
+      Apartments apartments, Houses houses, Map<String, dynamic> imageMap) {
     if (imageMap != null) {
       Map<int, String> images = {};
       imageMap['rows'].forEach((image) {
@@ -107,10 +128,10 @@ class _HomeListState extends State<HomeList> {
     }
   }
 
-  Future<void> fetchImage(Apartments apartments,Houses houses) async {
+  Future<void> fetchImage(Apartments apartments, Houses houses) async {
     var url = 'http://10.0.2.2:8000/homes/image';
     final imageData = await fetchData(url);
-    setImage(apartments,houses, imageData);
+    setImage(apartments, houses, imageData);
   }
 
   Future<void> fetchApartments(Apartments apartments) async {
@@ -139,7 +160,6 @@ class _HomeListState extends State<HomeList> {
 
   @override
   Widget build(BuildContext context) {
-
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
     } else {
@@ -150,7 +170,7 @@ class _HomeListState extends State<HomeList> {
       Apartments apartments = Provider.of<Apartments>(context);
       Houses houses = Provider.of<Houses>(context);
 
-      // TODO: Go through the handling of brokers seems strange? 
+      // TODO: Go through the handling of brokers seems strange?
       brokers.brokers
           .forEach((key, broker) => {brokersContext.addIfNotExists(broker)});
 
@@ -187,7 +207,10 @@ class _HomeListState extends State<HomeList> {
           title: Text('Hitta hemmet'),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.refresh, color: Colors.lightGreen,),
+              icon: const Icon(
+                Icons.refresh,
+                color: Colors.lightGreen,
+              ),
               tooltip: 'Uppdatera sidan',
               onPressed: () {
                 updateData();
@@ -239,7 +262,7 @@ class _HomeListState extends State<HomeList> {
               ),
               onSelected: (value) => {
                 print('Value = $value'),
-                if (value == 1)                  
+                if (value == 1)
                   {
                     Navigator.push(
                       context,

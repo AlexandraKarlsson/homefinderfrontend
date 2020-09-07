@@ -25,4 +25,8 @@ class Settings extends ChangeNotifier {
     showFavorites = newState;
     notifyListeners();
   }
+
+  String toString() {
+    return 'Settings[search=$search,showAppartment=$showApartment,showHouse=$showHouse,showFavorites=$showFavorites]';
+  }
 }

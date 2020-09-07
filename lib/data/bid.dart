@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
 
-class Bid extends ChangeNotifier {
-  final int saleId;
+class Bid {
+  final String date;
   final int userId;
   final int price;
 
   Bid(
-    this.saleId,
+    this.date,
     this.userId,
     this.price,
   );

@@ -11,6 +11,8 @@ import '../data/apartment.dart';
 import '../data/apartments.dart';
 import '../data/house.dart';
 import '../data/houses.dart';
+import '../data/bid.dart';
+import '../widgets/show_dialog_message.dart';
 
 class MakeBid extends StatefulWidget {
   static const String PATH = 'makeBid';
@@ -23,6 +25,8 @@ class _MakeBidState extends State<MakeBid> {
   Home home;
   User user;
   TextEditingController priceController = TextEditingController();
+  bool _showBidHistory = false;
+  List<Bid> bids;
 
   Future<void> createBid(
     BuildContext context,
@@ -149,6 +153,57 @@ class _MakeBidState extends State<MakeBid> {
     }
   }
 
+  Future<void> fetchAllBids(String token, Home home) async {
+    final url = 'http://10.0.2.2:8000/bid/all/${home.saleId}';
+    final headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'x-auth': token
+    };
+    final response = await http.get(
+      url,
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      print('fetchAllBids successful');
+      final data = convert.json.decode(response.body) as List<dynamic>;
+      print(data[0]["price"]);
+      List<Bid> newBids = List();
+
+      data.forEach((bid) {
+        String date = bid["date"];
+        int price = bid["price"];
+        int userId = bid["userid"];
+        Bid newBid = Bid(date, userId, price);
+        newBids.add(newBid);
+      });
+      setState(() {
+        bids = newBids;
+      });
+    } else {
+      print('fetchAllBids failed');
+      print(response);
+    }
+  }
+
+  Widget buildBidTable() {
+    List<DataRow> dataRows = List();
+    bids.forEach((bid) {
+      DataRow dataRow = DataRow(cells: [
+        DataCell(Text(bid.date)),
+        DataCell(Text(bid.userId.toString())),
+        DataCell(Text(Home.formatCurrency(bid.price, 'kr'))),
+      ]);
+      dataRows.add(dataRow);
+    });
+
+    return DataTable(columns: [
+      DataColumn(label: Text('Datum')),
+      DataColumn(label: Text('Användare')),
+      DataColumn(label: Text('Pris')),
+    ], rows: dataRows);
+  }
+
   @override
   Widget build(BuildContext context) {
     user = Provider.of<User>(context);
@@ -161,27 +216,46 @@ class _MakeBidState extends State<MakeBid> {
         child: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
+              Text(
+                '${home.address}',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 8),
               Image.network(
                 'http://10.0.2.2:8010/images/${home.image}',
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               Text(
                 'Aktuellt bud',
                 style: TextStyle(fontSize: 13),
               ),
-              Text(
-                Home.formatCurrency(home.price, 'kr'),
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              Row(
+                children: <Widget>[
+                  Text(
+                    Home.formatCurrency(home.price, 'kr'),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: _showBidHistory
+                        ? Icon(Icons.keyboard_arrow_up)
+                        : Icon(Icons.keyboard_arrow_down),
+                    onPressed: () {
+                      if (_showBidHistory) {
+                        setState(() {
+                          _showBidHistory = false;
+                        });
+                      } else {
+                        fetchAllBids(user.token, home);
+                        setState(() {
+                          _showBidHistory = true;
+                        });
+                      }
+                    },
+                  )
+                ],
               ),
-              /*
-              Card(
-                  elevation: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: ReadMoreText(home.description),
-                  )),
-              */
-              SizedBox(height: 15),
+              _showBidHistory ? buildBidTable() : Container(),
               TextField(
                 controller: priceController,
                 keyboardType: TextInputType.number,
@@ -199,14 +273,18 @@ class _MakeBidState extends State<MakeBid> {
                 onPressed: () {
                   int biddingPrice = int.parse(priceController.text);
                   print('Ditt budpris: ${biddingPrice.toString()}');
-
-                  // TODO: Check if the bidding price is lower then the original price
-                  createBid(context, biddingPrice, user.token);
-                  print('Update highest price');
-                  updatePrice(user.token, home);
-
-                  // TODO: Show alert with spinner if possible
-                  // TODO: If bid was unsuccessful update price and show dialog
+                  if (home.price < biddingPrice) {
+                    print('Creating bid');
+                    createBid(context, biddingPrice, user.token);
+                    print('Update highest price');
+                    updatePrice(user.token, home);
+                  } else {
+                    showDialogMessage(
+                      context,
+                      "Inputfel",
+                      "Ditt budpris är lägre än aktuellt budpris, höj budet!",
+                    );
+                  }
                 },
               ),
             ],
