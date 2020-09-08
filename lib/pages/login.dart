@@ -73,7 +73,8 @@ class _LoginState extends State<Login> {
             convert.json.decode(responseFavorite.body) as List<dynamic>;
         favorites.add(favoriteData);
       } else {
-        print('Favorite request failed with status: ${responseFavorite.statusCode}.');
+        print(
+            'Favorite request failed with status: ${responseFavorite.statusCode}.');
       }
     } else {
       print('Login request failed with status: ${response.statusCode}.');
@@ -82,78 +83,79 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Add spinner
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Logga in'),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(8),
-        color: Colors.blue[50],
-        child: Form(
-          key: this._formKey,
-          child: Column(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topLeft,
-                child: Hero(
-                  tag: 'account',
-                  child: Icon(Icons.account_circle, size: 90),
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      FormFieldText(
-                          label: 'Email',
-                          onSave: (String value) {
-                            loginData.email = value;
-                          }),
-                      FormFieldText(
-                        label: 'Lösenord',
-                        onSave: (String value) {
-                          loginData.password = value;
+    return _isSaving
+        ? Center(child: CircularProgressIndicator())
+        : Scaffold(
+            appBar: AppBar(
+              title: Text('Logga in'),
+            ),
+            body: Container(
+              padding: EdgeInsets.all(8),
+              color: Colors.blue[50],
+              child: Form(
+                key: this._formKey,
+                child: Column(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Hero(
+                        tag: 'account',
+                        child: Icon(Icons.account_circle, size: 90),
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            FormFieldText(
+                                label: 'Email',
+                                onSave: (String value) {
+                                  loginData.email = value;
+                                }),
+                            FormFieldText(
+                              label: 'Lösenord',
+                              onSave: (String value) {
+                                loginData.password = value;
+                              },
+                              obscureText: true,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                          setState(() {
+                            _isSaving = true;
+                          });
+                          login(context).then((_) {
+                            setState(() {
+                              _isSaving = false;
+                            });
+                            Navigator.pop(context);
+                          });
+                        }
+                      },
+                      child: Text('Logga in'),
+                    ),
+                    Text('Inget konto?'),
+                    RaisedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration: Duration(seconds: 3),
+                              pageBuilder: (_, __, ___) => AddUser(),
+                            ),
+                          );
                         },
-                        obscureText: true,
-                      ),
-                    ],
-                  ),
+                        child: Text('Skapa konto')),
+                  ],
                 ),
               ),
-              RaisedButton(
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    setState(() {
-                      _isSaving = true;
-                    });
-                    login(context).then((_) {
-                      setState(() {
-                        _isSaving = false;
-                      });
-                      Navigator.pop(context);
-                    });
-                  }
-                },
-                child: Text('Logga in'),
-              ),
-              Text('Inget konto?'),
-              RaisedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(seconds: 3),
-                        pageBuilder: (_, __, ___) => AddUser(),
-                      ),
-                    );
-                  },
-                  child: Text('Skapa konto')),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

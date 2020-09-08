@@ -154,11 +154,15 @@ class _MakeBidState extends State<MakeBid> {
     }
   }
 
-  Future<void> fetchAllBids(String token, Home home) async {
-    setState(() {
-      _isBusy = true;
-    });
+  Future<void> createBidAndUpdatePrice(
+      BuildContext context, int biddingPrice) async {
+    print('Creating bid');
+    await createBid(context, biddingPrice, user.token);
+    print('Update highest price');
+    await updatePrice(user.token, home);
+  }
 
+  Future<void> fetchAllBids(String token, Home home) async {
     final url = 'http://10.0.2.2:8000/bid/all/${home.saleId}';
     final headers = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -172,16 +176,17 @@ class _MakeBidState extends State<MakeBid> {
     if (response.statusCode == 200) {
       print('fetchAllBids successful');
       final data = convert.json.decode(response.body) as List<dynamic>;
-      print(data[0]["price"]);
+      // print(data[0]["price"]);
       List<Bid> newBids = List();
-
-      data.forEach((bid) {
-        String date = bid["date"];
-        int price = bid["price"];
-        int userId = bid["userid"];
-        Bid newBid = Bid(date, userId, price);
-        newBids.add(newBid);
-      });
+      if (data.isNotEmpty) {
+        data.forEach((bid) {
+          String date = bid["date"];
+          int price = bid["price"];
+          int userId = bid["userid"];
+          Bid newBid = Bid(date, userId, price);
+          newBids.add(newBid);
+        });
+      }
       setState(() {
         bids = newBids;
       });
@@ -189,9 +194,6 @@ class _MakeBidState extends State<MakeBid> {
       print('fetchAllBids failed');
       print(response);
     }
-    setState(() {
-      _isBusy = false;
-    });
   }
 
   Widget buildBidTable() {
@@ -261,9 +263,14 @@ class _MakeBidState extends State<MakeBid> {
                                       _showBidHistory = false;
                                     });
                                   } else {
-                                    fetchAllBids(user.token, home);
                                     setState(() {
-                                      _showBidHistory = true;
+                                      _isBusy = true;
+                                    });
+                                    fetchAllBids(user.token, home).then((_) {
+                                      setState(() {
+                                        _showBidHistory = true;
+                                        _isBusy = false;
+                                      });
                                     });
                                   }
                                 },
@@ -295,7 +302,15 @@ class _MakeBidState extends State<MakeBid> {
                               }
                               print('Ditt budpris: ${biddingPrice.toString()}');
                               if (home.price < biddingPrice) {
-                                createBidAndUpdatePrice(context, biddingPrice);
+                                setState(() {
+                                  _isBusy = true;
+                                });
+                                createBidAndUpdatePrice(context, biddingPrice)
+                                    .then((_) {
+                                  setState(() {
+                                    _isBusy = false;
+                                  });
+                                });
                               } else {
                                 showDialogMessage(
                                   context,
@@ -313,18 +328,5 @@ class _MakeBidState extends State<MakeBid> {
               ),
             ),
           );
-  }
-
-  Future<void> createBidAndUpdatePrice(BuildContext context, int biddingPrice) async {
-    print('Creating bid');
-    setState(() {
-      _isBusy = true;
-    });
-    await createBid(context, biddingPrice, user.token);
-    print('Update highest price');
-    await updatePrice(user.token, home);
-    setState(() {
-      _isBusy = false;
-    });
   }
 }
