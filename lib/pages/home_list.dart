@@ -17,6 +17,7 @@ import '../data/user.dart';
 import '../data/favorites.dart';
 import '../data/settings.dart';
 import 'login.dart';
+import 'show_bids.dart';
 
 void checkForUpdates(BuildContext context) {
   print('Running checkForUpdates ...');
@@ -219,7 +220,9 @@ class _HomeListState extends State<HomeList> {
             IconButton(
               icon: const Icon(Icons.gavel),
               onPressed: () {
-                // TODO: implement page for all the users bid
+                if (user.token != null) {
+                  Navigator.pushNamed(context, ShowBids.PATH);
+                }
               },
             ),
             user.token == null
@@ -263,11 +266,16 @@ class _HomeListState extends State<HomeList> {
                     ),
                     onSelected: (value) => {
                       print('Value = $value'),
-                      if (value == 1){
+                      if (value == 1)
+                        {
                           print('Om mig NOT IMPLEMENTED'),
-                        } else if (value == 2) {
+                        }
+                      else if (value == 2)
+                        {
                           _logout(user),
-                        }else {
+                        }
+                      else
+                        {
                           print('Unknown selection = $value'),
                         }
                     },

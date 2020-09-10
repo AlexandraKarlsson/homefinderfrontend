@@ -10,6 +10,7 @@ import 'pages/home_list.dart';
 import 'pages/login.dart';
 import 'pages/add_user.dart';
 import 'pages/make_bid.dart';
+import 'pages/show_bids.dart';
 
 import 'data/settings.dart';
 import 'data/brokers.dart';
@@ -65,6 +66,7 @@ class MyApp extends StatelessWidget {
           AddUser.PATH: (context) => AddUser(),
           Login.PATH: (context) => Login(),
           MakeBid.PATH: (context) => MakeBid(),
+          ShowBids.PATH: (context) => ShowBids(),
           // HomeDetail.HOME_PATH: (context) => HomeDetail(),
           Test.TEST_PATH: (context) => Test(),
           PopUp.PATH: (context) => PopUp(),
