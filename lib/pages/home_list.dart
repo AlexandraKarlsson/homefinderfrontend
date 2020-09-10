@@ -222,64 +222,56 @@ class _HomeListState extends State<HomeList> {
                 // TODO: implement page for all the users bid
               },
             ),
-            PopupMenuButton<int>(
-              itemBuilder: (context) => [
-                user.token == null
-                    ? PopupMenuItem(
-                        value: 1,
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.account_circle,
-                              size: 30,
-                              color: Colors.blue,
-                            ),
-                            Text("Logga in"),
-                          ],
-                        ),
-                      )
-                    : null,
-                user.token != null
-                    ? PopupMenuItem(
-                        value: 2,
-                        child: Text("Om mig"),
-                      )
-                    : null,
-                user.token != null
-                    ? PopupMenuItem(
-                        value: 3,
-                        child: Text("Logga ut"),
-                      )
-                    : null,
-              ],
-              icon: Hero(
-                tag: 'account',
-                child: Icon(
-                  Icons.account_circle,
-                  color: user.token != null ? Colors.lightGreen : Colors.white,
-                  size: 30,
-                ),
-              ),
-              onSelected: (value) => {
-                print('Value = $value'),
-                if (value == 1)
-                  {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(seconds: 3),
-                        pageBuilder: (_, __, ___) => Login(),
+            user.token == null
+                ? IconButton(
+                    icon: Hero(
+                      tag: 'account',
+                      child: const Icon(
+                        Icons.account_circle,
+                        color: Colors.white,
+                        size: 30,
                       ),
-                    )
-                  }
-                else if (value == 2)
-                  {print('Om mig NOT IMPLEMENTED')}
-                else if (value == 3)
-                  {_logout(user)}
-                else
-                  {print('Unknown selection = $value')}
-              },
-            ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          transitionDuration: Duration(seconds: 3),
+                          pageBuilder: (_, __, ___) => Login(),
+                        ),
+                      );
+                    },
+                  )
+                : PopupMenuButton<int>(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 1,
+                        child: Text("Om mig"),
+                      ),
+                      PopupMenuItem(
+                        value: 2,
+                        child: Text("Logga ut"),
+                      ),
+                    ],
+                    icon: Hero(
+                      tag: 'account',
+                      child: Icon(
+                        Icons.account_circle,
+                        color: Colors.lightGreen,
+                        size: 30,
+                      ),
+                    ),
+                    onSelected: (value) => {
+                      print('Value = $value'),
+                      if (value == 1){
+                          print('Om mig NOT IMPLEMENTED'),
+                        } else if (value == 2) {
+                          _logout(user),
+                        }else {
+                          print('Unknown selection = $value'),
+                        }
+                    },
+                  ),
           ],
         ),
         drawer: MainDrawer(settings.search),
