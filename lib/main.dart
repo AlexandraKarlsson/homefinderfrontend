@@ -15,6 +15,7 @@ import 'pages/show_bids.dart';
 import 'data/settings.dart';
 import 'data/brokers.dart';
 import 'data/user.dart';
+import 'data/user_bids.dart';
 import 'data/apartments.dart';
 import 'data/houses.dart';
 import 'data/favorites.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<Settings>(create: (_) => Settings()),
         ChangeNotifierProvider<User>(create: (_) => User()),
+        ChangeNotifierProvider<UserBids>(create: (_) => UserBids()),
         ChangeNotifierProvider<Favorites>(create: (_) => Favorites()),
         ChangeNotifierProvider<Apartments>(create: (_) => Apartments()),
         ChangeNotifierProvider<Houses>(create: (_) => Houses()),

@@ -1,70 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'dart:async';
-import 'dart:convert' as convert;
-import 'package:http/http.dart' as http;
+// import 'package:provider/provider.dart';
 
 import '../pages/home_detail.dart';
 import '../pages/make_bid.dart';
 import '../data/home.dart';
-import '../data/user.dart';
-import '../data/favorites.dart';
+import '../data/user_bid.dart';
 
 class BidListItem extends StatelessWidget {
   final Home home;
+  final UserBid userBid;
 
-  const BidListItem({@required this.home});
-
-  Future<void> updateFavorites(Favorites favorites, String token) async {
-    bool addFavorite = !favorites.exists(home.id);
-    if (addFavorite) {
-      const url = 'http://10.0.2.2:8000/favorite';
-      final headers = <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth': token
-      };
-      final newFavoriteData = {
-        'homeid': home.id,
-      };
-      final newFavoriteDataJson = convert.jsonEncode(newFavoriteData);
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: newFavoriteDataJson,
-      );
-      if (response.statusCode == 201) {
-        favorites.put(home.id);
-      } else {
-        print(
-            'Add favorites request failed with status: ${response.statusCode}.');
-      }
-    } else {
-      // removeFavorite
-      final url = 'http://10.0.2.2:8000/favorite/${home.id}';
-      print('url = $url');
-      final headers = <String, String>{'x-auth': token};
-      final response = await http.delete(
-        url,
-        headers: headers,
-      );
-
-      if (response.statusCode == 200) {
-        favorites.remove(home.id);
-      } else {
-        print(
-            'Remove favorites request failed with status: ${response.statusCode}.');
-      }
-    }
-  }
+  BidListItem(this.userBid,this.home) : super(key: Key(userBid.saleId.toString()));
 
   @override
   Widget build(BuildContext context) {
-    Favorites favorites = Provider.of<Favorites>(context);
-    User user = Provider.of<User>(context);
+
+    // TODO: Indicate if price is overbidden then mark red
 
     return Container(
       child: Card(
+        color: userBid.isHighest ? Colors.green[200] : Colors.red[200],
         elevation: 5,
         child: InkWell(
           onTap: () {
@@ -96,20 +51,7 @@ class BidListItem extends StatelessWidget {
                   width: 70,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      InkWell(
-                        child: Icon(favorites.exists(home.id)
-                            ? Icons.star
-                            : Icons.star_border),
-                        onTap: () {
-                          if (user.token != null) {
-                            updateFavorites(favorites, user.token);
-                          }
-                        },
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
+                    children: <Widget>[                              
                       InkWell(
                         child: Icon(Icons.gavel),
                         onTap: () {
