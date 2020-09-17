@@ -61,7 +61,7 @@ class _MakeBidState extends State<MakeBid> {
       } else {
         print('Home is unknown');
       }
-      return showDialog<void>(
+      showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -89,7 +89,7 @@ class _MakeBidState extends State<MakeBid> {
         },
       );
     } else {
-      return showDialog<void>(
+      showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
